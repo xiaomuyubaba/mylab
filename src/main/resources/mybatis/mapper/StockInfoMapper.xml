@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lijin.mylab.dao.mybatis.mapper.StockInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.lijin.mylab.dao.mybatis.model.StockInfo">
+		<id column="stock_no" property="stockNo" jdbcType="CHAR" />
+		<result column="stock_nm" property="stockNm" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="BaseResultMap">
+		select * from tbl_stock_info
+	</select>
+
+	<insert id="add" parameterType="com.lijin.mylab.dao.mybatis.model.StockInfo">
+		INSERT INTO tbl_stock_info
+		(stock_no, stock_nm)
+		VALUES
+		(#{stockNo}, #{stockNm})
+	</insert>
+	
+	<insert id="batchAdd" parameterType="java.util.List">
+		INSERT INTO tbl_stock_info
+		(stock_no, stock_nm)
+		VALUES
+		<foreach collection ="lst" item="e" index= "index" separator =",">
+			(#{e.stockNo}, #{e.stockNm})
+		</foreach >
+	</insert>
+
+	<delete id="delete">
+		delete from tbl_stock_info where stock_no = #{stockNo,jdbcType=CHAR}
+	</delete>
+</mapper>

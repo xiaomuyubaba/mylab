@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lijin.mylab.dao.mybatis.mapper.StockPositionLogMapper">
+	<resultMap id="BaseResultMap"
+		type="com.lijin.mylab.dao.mybatis.model.StockPositionLog">
+		<id column="log_id" property="logId" jdbcType="INTEGER" />
+		<result column="stock_no" property="stockNo" jdbcType="CHAR" />
+		<result column="trans_number" property="transNumber" jdbcType="INTEGER" />
+		<result column="buy_in_dt" property="buyInDt" jdbcType="CHAR" />
+		<result column="buy_in_at" property="buyInAt" jdbcType="DECIMAL" />
+		<result column="sell_out_dt" property="sellOutDt" jdbcType="CHAR" />
+		<result column="sell_out_at" property="sellOutAt" jdbcType="DECIMAL" />
+		<result column="status" property="status" jdbcType="CHAR" />
+	</resultMap>
+	
+	<select id="countByParamMap" resultType="java.lang.Integer" parameterType="Map">
+		select count(*) from tbl_stock_position_log where 1=1
+		<if test="qryParamMap != null">
+			<if test="qryParamMap.positionId != null">
+			and position_id=#{qryParamMap.positionId}
+			</if>
+			<if test="qryParamMap.status != null">
+				and status=#{qryParamMap.status}
+			</if>
+		</if>
+	</select>
+
+	<select id="selectByParamMap" resultMap="BaseResultMap" parameterType="Map">
+		select * from tbl_stock_position_log where 1=1
+		<if test="qryParamMap != null">
+			<if test="qryParamMap.stockNo != null">
+			and stock_no=#{qryParamMap.stockNo}
+			</if>
+			<if test="qryParamMap.status != null">
+				and status=#{qryParamMap.status}
+			</if>
+		</if>
+		order by buy_in_dt desc, status asc
+	</select>
+
+	<select id="selectByLogId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * from tbl_stock_position_log where log_id=#{logId}
+	</select>
+
+	<insert id="add" parameterType="com.lijin.mylab.dao.mybatis.model.StockPositionLog">
+		INSERT INTO tbl_stock_position_log
+		(stock_no, trans_number, buy_in_dt, buy_in_at, sell_out_dt, sell_out_at, status)
+		VALUES
+		(#{stockNo}, #{transNumber}, #{buyInDt}, #{buyInAt}, #{sellOutDt}, #{sellOutAt}, #{status})
+	</insert>
+
+	<update id="upd" parameterType="map">
+		UPDATE tbl_stock_position_log set 
+		sell_out_dt=#{sellOutDt}, sell_out_at=#{sellOutAt}, status=#{status} 
+		where log_id=#{logId}
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE from tbl_stock_position_log where log_id=#{logId}
+	</delete>
+</mapper>

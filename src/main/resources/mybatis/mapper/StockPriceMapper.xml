@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lijin.mylab.dao.mybatis.mapper.StockPriceMapper">
+	<resultMap id="BaseResultMap"
+		type="com.lijin.mylab.dao.mybatis.model.StockPrice">
+		<id column="stock_no" property="stockNo" jdbcType="CHAR" />
+    	<id column="price_dt" property="priceDt" jdbcType="CHAR" />
+		<result column="open_price" property="openPrice" jdbcType="INTEGER" />
+		<result column="max_price" property="maxPrice" jdbcType="INTEGER" />
+		<result column="min_price" property="minPrice" jdbcType="INTEGER" />
+		<result column="close_price" property="closePrice" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="MaxAndMinPriceResultMap"
+		type="com.lijin.mylab.dao.mybatis.model.StockMaxAndMinPrice">
+		<result column="stock_no" property="stockNo" jdbcType="CHAR" />
+		<result column="max_price" property="maxPrice" jdbcType="INTEGER" />
+		<result column="min_price" property="minPrice" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="countByParamMap" resultType="java.lang.Integer" parameterType="Map">
+		select count(*) from tbl_stock_price where 1=1
+		<if test="qryParamMap != null">
+			<if test="qryParamMap.stockNo != null">
+			and stock_no=#{qryParamMap.stockNo}
+			</if>
+		</if>
+	</select>
+
+	<select id="selectByParamMap" resultMap="BaseResultMap" parameterType="Map">
+		select * from tbl_stock_price where 1=1
+		<if test="qryParamMap != null">
+			<if test="qryParamMap.stockNo != null">
+			and stock_no=#{qryParamMap.stockNo}
+			</if>
+		</if>
+	</select>
+	
+	<select id="selectMaxAndMinPriceByDt" resultMap="MaxAndMinPriceResultMap" parameterType="Map">
+		select stock_no, max(max_price) as max_price, min(min_price) as min_price
+		from tbl_stock_price where price_dt like concat(#{priceDtPrefix}, '%')
+		group by stock_no
+	</select>
+
+	<insert id="add" parameterType="com.lijin.mylab.dao.mybatis.model.StockPrice">
+		INSERT INTO tbl_stock_price
+		(stock_no, price_dt, open_price, max_price, min_price, close_price)
+		VALUES
+		(#{stockNo}, #{priceDt}, #{openPrice}, #{maxPrice}, #{minPrice}, #{closePrice})
+	</insert>
+	
+	<insert id="batchAdd" parameterType="java.util.List">
+		INSERT INTO tbl_stock_price
+		(stock_no, price_dt, open_price, max_price, min_price, close_price)
+		VALUES
+		<foreach collection ="lst" item="p" index= "index" separator =",">
+			(#{p.stockNo}, #{p.priceDt}, #{p.openPrice}, #{p.maxPrice}, #{p.minPrice}, #{p.closePrice})
+		</foreach >
+	</insert>
+
+</mapper>

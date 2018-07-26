@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lijin.mylab.dao.mybatis.mapper.StockPositionMapper">
+	<resultMap id="BaseResultMap"
+		type="com.lijin.mylab.dao.mybatis.model.StockPosition">
+		<id column="seq_id" property="seqId" jdbcType="INTEGER" />
+		<result column="stock_no" property="stockNo" jdbcType="CHAR" />
+		<result column="stock_nm" property="stockNm" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="INTEGER" />
+		<result column="curr_cost" property="currCost" jdbcType="INTEGER" />
+		<result column="profit_amt" property="profitAmt" jdbcType="INTEGER" />
+		<result column="last_upd_ts" property="lastUpdTs" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<select id="countByParamMap" resultType="java.lang.Integer" parameterType="Map">
+		select count(*) from tbl_stock_position where 1=1
+		<if test="qryParamMap != null">
+			<if test="qryParamMap.stockNo != null">
+			and stock_no=#{qryParamMap.stockNo}
+			</if>
+		</if>
+	</select>
+
+	<select id="selectByParamMap" resultMap="BaseResultMap" parameterType="Map">
+		select * from tbl_stock_position where 1=1
+		<if test="qryParamMap != null">
+			<if test="qryParamMap.positionId != null">
+			and position_id=#{qryParamMap.positionId}
+			</if>
+			<if test="qryParamMap.status != null">
+				and status=#{qryParamMap.status}
+			</if>
+		</if>
+	</select>
+
+	<select id="selectBySeqId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * from tbl_stock_position where seq_id=#{seqId}
+	</select>
+
+	<insert id="add" parameterType="com.lijin.mylab.dao.mybatis.model.StockPosition">
+		INSERT INTO tbl_stock_position
+		(stock_no, stock_nm, position, curr_cost, profit_amt)
+		VALUES
+		(#{stockNo}, #{stockNm}, #{position}, #{currCost}, #{profitAmt})
+	</insert>
+
+	<update id="upd" parameterType="com.lijin.mylab.dao.mybatis.model.StockPosition">
+		UPDATE tbl_stock_position set position=#{position},
+		curr_cost=#{currCost}, profit_amt=#{profitAmt} where seq_id=#{seqId}
+	</update>
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		DELETE from tbl_stock_position where seq_id=#{seqId}
+	</delete>
+</mapper>
