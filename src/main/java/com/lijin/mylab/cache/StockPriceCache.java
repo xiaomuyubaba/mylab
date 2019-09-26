@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
@@ -59,6 +60,15 @@ public class StockPriceCache {
 		try {
 			logger.info("fetch stock price started:" + stockNo);
 			HttpGet hg = new HttpGet("http://hq.sinajs.cn/list=" + stockNo.toLowerCase());
+//			HttpHost proxy = new HttpHost("172.16.1.245", 8080);
+//			logger.info("prox: " + proxy.getAddress());
+			RequestConfig requestConfig = RequestConfig.custom()
+//	                .setProxy(proxy)
+	                .setConnectTimeout(10000)
+	                .setSocketTimeout(10000)
+	                .setConnectionRequestTimeout(3000)
+	                .build();
+			hg.setConfig(requestConfig);
 			CloseableHttpResponse response = HttpClients.createDefault().execute(hg);
 			String str = EntityUtils.toString(response.getEntity());
 			String stockPriceInfo = str.substring(str.indexOf("\"") + 1, str.lastIndexOf("\""));

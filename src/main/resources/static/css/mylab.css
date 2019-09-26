@@ -4,7 +4,7 @@
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 50px;
+  padding-top: 0px;
   background: #eee;
   font-size: 13px;
 }
@@ -25,7 +25,7 @@ body {
  */
 .sidebar {
     position: fixed;
-    top: 10px;
+    top: 0px;
     width: 203px;
     bottom: 0;
     left: 0;
@@ -70,7 +70,7 @@ body {
 }
 
 .main .page-content {
-	padding-top: 55px;
+	padding-top: 50px;
 	padding-left: 15px;
 	padding-right: 15px;
 }

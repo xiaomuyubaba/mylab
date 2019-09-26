@@ -71,6 +71,12 @@ public class StockController extends BaseController {
 					BigDecimal currPrice = stockPriceCache.getCurrPrice(stockNo);
 					m.put("currPrice", currPrice.toPlainString());
 					m.put("profit", currPrice.subtract(bd).divide(bd, 4, RoundingMode.UP).movePointRight(2).toPlainString());
+					
+					int prepareSellOutAt = buyInAt * 105 / 100 + 10;
+					m.put("prepareSellOutAt", new BigDecimal(prepareSellOutAt).movePointLeft(2).toPlainString());
+					
+					int prepareBuyInAt = buyInAt * 95 / 100 - 10;
+					m.put("prepareBuyInAt", new BigDecimal(prepareBuyInAt).movePointLeft(2).toPlainString());
 				} else if (PositionLogStatus._1.getCode().equals(status)) {
 					int sellOutAt = Integer.parseInt(m.get("sellOutAt"));
 					BigDecimal bd2 = new BigDecimal(sellOutAt).movePointLeft(2);

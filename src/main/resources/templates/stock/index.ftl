@@ -12,26 +12,11 @@
 	</head>
 	
 	<body>
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container-fluid" style="padding-left: 0">
-				<div class="navbar-header">
-          			<a class="navbar-logo" href="#"></a>
-          		</div>
-          		
-          		<div id="navbar" class="navbar-collapse collapse">
-          			<ul class="nav navbar-nav navbar-right">
-						<li><a href="#">个人事务</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-		
 		<div>
     		<div class="sidebar">
     			<div id="jquery-accordion-menu" class="jquery-accordion-menu">
 					<ul id="demo-list">
 						<li class="active"><a href="#"><i class="fa fa-bar-chart"></i>股海浮沉</a></li>
-						<li><a href="#"><i class="fa fa-calendar"></i>待办事项</a></li>
 					</ul>
 				</div>
     		</div>
@@ -39,7 +24,6 @@
 			<div class="main">
 				<div class="page-header">
 					<ol class="breadcrumb">
-					    <li><a href="#">个人事务</a></li>
 					    <li><a href="#">股海浮沉</a></li>
 				    </ol>
 				</div>
@@ -87,8 +71,13 @@
 			                                <th data-field="stockNm" data-sortable="true">股票名称</th>
 			                                <th data-field="transNumber">股票数</th>
 			                                <th data-field="buyInDt">买入日期</th>
-			                                <th data-field="buyInAt">买入价格</th>
-			                                <th data-field="currPrice">当前价格</th>
+			                                <th data-field="buyInAt">买入价</th>
+			                                <th data-field="currPrice"
+			                                	data-formatter="currPriceFormatter">当前价</th>
+			                                <th data-field="prepareSellOutAt"
+			                                	data-formatter="prepareSellOutAtFormatter">计划卖出价</th>
+			                                <th data-field="prepareBuyInAt"
+			                                	data-formatter="prepareBuyInAtFormatter">计划补仓价</th>
 			                                <th data-field="profit"
 			                                	data-sortable="true"
 			                                	data-formatter="profitFormatter">盈亏比</th>
@@ -115,9 +104,9 @@
 			                                <th data-field="stockNm">股票名称</th>
 			                                <th data-field="transNumber">股票数</th>
 			                                <th data-field="buyInDt">买入日期</th>
-			                                <th data-field="buyInAt">买入金额</th>
+			                                <th data-field="buyInAt">买入价</th>
 			                                <th data-field="sellOutDt">卖出日期</th>
-			                                <th data-field="sellOutAt">卖出金额</th>
+			                                <th data-field="sellOutAt">卖出价</th>
 			                                <th data-field="profit"
 			                                	data-sortable="true"
 			                                	data-formatter="profitFormatter">盈亏比</th>
@@ -221,6 +210,35 @@
 		        	return '<span style="color:red;font-weight:bold;">' + value + '</span>';
 		        } else {
 		        	return '<span>' + value + '</span>';
+		        }
+		    }
+		    function currPriceFormatter(value, row, index) {
+		    	let b = parseFloat(row.buyInAt);
+		    	let c = parseFloat(row.currPrice);
+		    	if (c > b) {
+		        	return '<span style="color:red;font-weight:bold;">' + value + '</span>';
+		        } else if (c < b) {
+		        	return '<span style="color:green;font-weight:bold;">' + value + '</span>';
+		        } else {
+		        	return '<span>' + value + '</span>';
+		        }
+		    }
+		    function prepareSellOutAtFormatter(value, row, index) {
+		    	let f = parseFloat(value);
+		    	let c = parseFloat(row.currPrice);
+		        if (c >= f) {
+		        	return '<span style="color:red;font-weight:bold;">' + value + '</span>';
+		        } else {
+		        	return '<span style="color:#999;font-weight:bold;">' + value + '</span>';
+		        }
+		    }
+		    function prepareBuyInAtFormatter(value, row, index) {
+		    	let f = parseFloat(value);
+		    	let c = parseFloat(row.currPrice);
+		        if (c <= f) {
+		        	return '<span style="color:red;font-weight:bold;">' + value + '</span>';
+		        } else {
+		        	return '<span style="color:#999;font-weight:bold;">' + value + '</span>';
 		        }
 		    }
 		    function idxFormatter(value, row, index) {
