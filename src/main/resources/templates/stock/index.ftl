@@ -17,6 +17,8 @@
     			<div id="jquery-accordion-menu" class="jquery-accordion-menu">
 					<ul id="demo-list">
 						<li class="active"><a href="#"><i class="fa fa-bar-chart"></i>股海浮沉</a></li>
+						<li class="active"><a href="#"><i class="fa fa-bar-chart"></i>历史交易</a></li>
+						<li class="active"><a href="#"><i class="fa fa-bar-history"></i>股票管理</a></li>
 					</ul>
 				</div>
     		</div>
@@ -24,10 +26,12 @@
 			<div class="main">
 				<div class="page-header">
 					<ol class="breadcrumb">
-					    <li><a href="#">股海浮沉</a></li>
+					    <li><a href="#">当前持仓</a></li>
+					    <li><a href="#">历史交易</a></li>
+					    <li><a href="#">股票管理</a></li>
 				    </ol>
 				</div>
-	
+
 				<div class="page-content">
 					<div class="tabbable">
 	        			<ul id="stockTab" class="nav nav-tabs">
@@ -43,7 +47,8 @@
 									<a id="buyBtn" class="btn btn-primary" href="javascript:">买入</a>
 									<a id="sellBtn" class="btn btn-primary" href="javascript:">卖出</a>
 									<a id="addStockBtn" class="btn btn-primary" href="javascript:">添加股票</a>
-									<a id="refreshBtn" class="btn btn-primary" href="javascript:">点击刷新</a>
+									<a id="refreshBtn" class="btn btn-primary" href="javascript:">刷新</a>
+									<a id="delBtn" class="btn btn-danger" href="javascript:">删除</a>
 									<span class="alert"></span>
 								</div>
 										
@@ -181,6 +186,34 @@
 		    			$logTable.bootstrapTable("load", data);
 		    			$("#refreshBtn").html("点击刷新");
 		    		});
+		    	});
+
+		    	$("#delBtn").click(function() {
+		    	    var rows = $logTable.bootstrapTable('getSelections');
+                    if (rows && rows.length == 1) {
+                        if (confirm("确认删除?")) {
+                            $.ajax({
+                                url: "/stock/delLog",
+                                type: 'post',
+                                data: {
+                                    logId : rows[0].logId
+                                },
+                                success: function (data) {
+                                    if (data == "succ") {
+                                        alert('删除成功!');
+                                        $logTable.bootstrapTable('refresh');
+                                    } else {
+                                        alert(data);
+                                    }
+                                },
+                                error: function (data) {
+                                    alert('删除失败:' + data);
+                                }
+                            });
+                        }
+                    } else {
+                        alert("请选择一条记录");
+                    }
 		    	});
 		    	
 		    	$("#addStockBtn").click(function() {

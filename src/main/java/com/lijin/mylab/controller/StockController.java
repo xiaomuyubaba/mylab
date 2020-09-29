@@ -1,22 +1,5 @@
 package com.lijin.mylab.controller;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.lijin.mylab.cache.StockInfoCache;
 import com.lijin.mylab.cache.StockPriceCache;
 import com.lijin.mylab.dao.mybatis.mapper.StockInfoMapper;
@@ -25,12 +8,25 @@ import com.lijin.mylab.dao.mybatis.model.StockInfo;
 import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
 import com.lijin.mylab.entity.IEntityTransfer;
 import com.lijin.mylab.enums.PositionLogStatus;
+import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 @Controller
 @RequestMapping("/stock")
 public class StockController extends BaseController {
 	
-	private static final Logger logger = Logger.getLogger(StockController.class);
+	private static final Logger logger = LoggerFactory.getLogger(StockController.class);
 	
 	@Autowired
 	private StockInfoCache stockInfoCache;
@@ -175,6 +171,21 @@ public class StockController extends BaseController {
 			log.setSellOutAt(new BigDecimal(sellOutAt).movePointRight(2).intValue());
 			log.setStatus(PositionLogStatus._1.getCode());
 			stockPositionLogMapper.upd(log);
+			return "succ";
+		} catch (Exception e) {
+			logger.error("sell failed!!", e);
+			return "fail";
+		}
+	}
+
+	@RequestMapping(path = "/delLog", method = RequestMethod.POST)
+	public @ResponseBody String delLog(int logId) {
+		try {
+			StockPositionLog log = stockPositionLogMapper.selectByLogId(logId);
+			if (log == null) {
+				return "未找到持仓记录:" + logId;
+			}
+			stockPositionLogMapper.delete(logId);
 			return "succ";
 		} catch (Exception e) {
 			logger.error("sell failed!!", e);

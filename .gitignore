@@ -7,3 +7,5 @@
 .settings/*
 /.settings/  
 /target/
+*.iml
+/.idea/

@@ -1,17 +1,18 @@
 package com.lijin.mylab.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 public class JsonUtil {
 
-	private static final Logger log = Logger.getLogger(JsonUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(JsonUtil.class);
+
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	/**
@@ -24,7 +25,7 @@ public class JsonUtil {
 		try {
 			return mapper.writeValueAsString(obj);
 		} catch (Exception e) {
-			log.error("write to json string error:" + obj, e);
+			logger.error("write to json string error:" + obj, e);
 			return null;
 		}
 	}
@@ -40,7 +41,7 @@ public class JsonUtil {
 		try {
 			return mapper.readValue(jsonString, clazz);
 		} catch (Exception e) {
-			log.error("parse json string error:" + jsonString, e);
+			logger.error("parse json string error:" + jsonString, e);
 			return null;
 		}
 	}

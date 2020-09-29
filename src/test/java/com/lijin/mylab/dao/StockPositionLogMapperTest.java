@@ -1,18 +1,16 @@
 package com.lijin.mylab.dao;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.lijin.mylab.dao.mybatis.mapper.StockPositionLogMapper;
+import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openjdk.jol.info.ClassLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.lijin.mylab.dao.mybatis.mapper.StockPositionLogMapper;
-import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -28,11 +26,8 @@ public class StockPositionLogMapperTest {
 		paramMap.put("status", "1");
 		List<StockPositionLog> lst = mapper.selectByParamMap(null);
 		
-		System.out.println(ClassLayout.parseClass(StockPositionLog.class).toPrintable());
-		
 		for (StockPositionLog spl : lst) {
 			System.out.println(spl.getLogId() + "_" + spl.getBuyInDt() + "_" + spl.getBuyInAt() + "_" + spl.getSellOutDt() + "_" + spl.getSellOutAt());
-	        System.out.println(ClassLayout.parseInstance(spl).toPrintable());
 		}
 	}
 	

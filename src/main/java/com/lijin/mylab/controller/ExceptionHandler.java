@@ -1,24 +1,23 @@
 package com.lijin.mylab.controller;
 
-import java.io.PrintWriter;
-import java.lang.reflect.Method;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
+import com.lijin.mylab.entity.AjaxResult;
+import com.lijin.mylab.exception.BizzException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
-import com.lijin.mylab.entity.AjaxResult;
-import com.lijin.mylab.exception.BizzException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.lang.reflect.Method;
 
 @Component
 public class ExceptionHandler extends SimpleMappingExceptionResolver {
 	
-	private static final Logger logger = Logger.getLogger(ExceptionHandler.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExceptionHandler.class);
 	
 	private static String DFT_AJAX_ERR_MSG = "{\"respCode\":\"ZZ\",\"respMsg\":\"系统异常，请联系管理员\"}";
 	private static String AJAX_ERR_MSG_TMPL = "{\"respCode\":\"ZZ\",\"respMsg\":\"{errMsg}\"}";

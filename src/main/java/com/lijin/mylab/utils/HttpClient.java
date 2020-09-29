@@ -1,18 +1,15 @@
 
 package com.lijin.mylab.utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.X509TrustManager;
+import java.io.*;
+import java.net.*;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -22,16 +19,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.X509TrustManager;
-
-import org.apache.log4j.Logger;
-
 
 public class HttpClient {
-	private static Logger log = Logger.getLogger(HttpClient.class);
+	private static Logger logger = LoggerFactory.getLogger(HttpClient.class);
 
 	public static final String CR_LF = "\r\n";
 	
@@ -201,8 +191,8 @@ public class HttpClient {
 		if (resBody != null) {
 			resBuffer.append(new String(resBody, charset));
 		}
-		if(logEnabled && log.isInfoEnabled()){
-			log.info(concat(logHead, "cost "+(System.currentTimeMillis()-begin)+" ms\n",
+		if(logEnabled && logger.isInfoEnabled()){
+			logger.info(concat(logHead, "cost "+(System.currentTimeMillis()-begin)+" ms\n",
 					resBuffer.toString()));
 		}	
 	}
@@ -285,21 +275,21 @@ public class HttpClient {
 			try {
 				out.close();
 			} catch (IOException e) {
-				log.error("close meet excetption",  e);//(Level.WARNING, , e);
+				logger.error("close meet excetption",  e);//(Level.WARNING, , e);
 			}
 		}
 		if (in != null) {
 			try {
 				in.close();
 			} catch (IOException e) {
-				log.error("close meet excetption", e);
+				logger.error("close meet excetption", e);
 			}
 		}
 		if (socket != null) {
 			try {
 				socket.close();
 			} catch (IOException e) {
-				log.error("close meet excetption", e);
+				logger.error("close meet excetption", e);
 			}
 		}
 		//log.info(concat(logHead,"closed."));
@@ -328,8 +318,8 @@ public class HttpClient {
 		String head = composeHeader(0, null,
 				HttpMethod.GET);
 
-		if(logEnabled && log.isInfoEnabled()){
-			log.info(concat(logHead, "\r\n", head));
+		if(logEnabled && logger.isInfoEnabled()){
+			logger.info(concat(logHead, "\r\n", head));
 		}	
 		request(head.getBytes(charset));
 	}
@@ -342,8 +332,8 @@ public class HttpClient {
 		String head = composeHeader(body.getBytes(charset).length, null,
 				HttpMethod.POST);
 		String httpMsg = concat(head, body);
-		if(logEnabled && log.isInfoEnabled()){
-		log.info(concat(logHead, "\r\n", httpMsg));
+		if(logEnabled && logger.isInfoEnabled()){
+		logger.info(concat(logHead, "\r\n", httpMsg));
 		}
 		request(httpMsg.getBytes(charset));
 	}
@@ -369,8 +359,8 @@ public class HttpClient {
 		String head = composeHeader(body.getBytes(charset).length, headData,
 				HttpMethod.POST);
 		String httpMsg = concat(head, body);
-		if(logEnabled && log.isInfoEnabled()){
-			log.info(concat(logHead, "\r\n", concat(head, formatMap(postData))));
+		if(logEnabled && logger.isInfoEnabled()){
+			logger.info(concat(logHead, "\r\n", concat(head, formatMap(postData))));
 		}		
 		request(httpMsg.getBytes(charset));
 	}

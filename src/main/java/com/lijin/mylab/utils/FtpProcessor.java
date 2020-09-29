@@ -1,43 +1,37 @@
 package com.lijin.mylab.utils;
 
+import com.lijin.mylab.exception.BizzException;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.net.ftp.FTPClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.log4j.Logger;
-
-import com.lijin.mylab.exception.BizzException;
-
 public class FtpProcessor {
 
-	private final Logger logger = Logger.getLogger(FtpProcessor.class);
+	private final Logger logger = LoggerFactory.getLogger(FtpProcessor.class);
 	
 	/**
 	 * FTP客户端工具类
 	 */
-	private FTPClient ftp = new FTPClient();	
+	private FTPClient ftp = new FTPClient();
 
 	/**
+	 *
 	 * @param host
+	 * @param port
 	 * @param ftpUser
-	 * @param password
-	 * @throws HuatengException
+	 * @param ftpPassword
 	 */
 	public FtpProcessor(String host, int port, String ftpUser, String ftpPassword) {
 		conn(host, port, ftpUser, ftpPassword);
 	}
-	
-	/**
-	 * Download a file from the server
-	 * 
-	 * @param fileName
-	 * @param isTextFile
-	 * @return
-	 */
+
 	public boolean getFile(String remoteDir, String localDir, String fileNm, boolean isTextFile, String charset) {
 		AssertUtil.strIsNotBlank(remoteDir, "remoteDir is blank.");
 		AssertUtil.strIsNotBlank(localDir, "localDir is blank.");

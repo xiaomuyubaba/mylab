@@ -1,29 +1,29 @@
 package com.lijin.mylab.cache;
 
+import com.lijin.mylab.dao.mybatis.mapper.StockPositionLogMapper;
+import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
-
-import com.lijin.mylab.dao.mybatis.mapper.StockPositionLogMapper;
-import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
-
 @Component
 @Configurable
 public class StockPriceCache {
 	
-	private static final Logger logger = Logger.getLogger(StockPriceCache.class);
+	private static final Logger logger = LoggerFactory.getLogger(StockPriceCache.class);
 	
 	private Map<String, BigDecimal> priceCache = new ConcurrentHashMap<String, BigDecimal>();
 	
