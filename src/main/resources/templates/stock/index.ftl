@@ -6,7 +6,6 @@
     	<link href="/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
     	<link rel="stylesheet" href="/bootstrap-table/bootstrap-table.css">
     	<link rel="stylesheet" href="/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
-    	<link rel="stylesheet" type="text/css" href="/css/jquery-accordion-menu.css"></link>
     	<link rel="stylesheet" type="text/css" href="/font-awesome/css/font-awesome.min.css"></link>
 		<link rel="stylesheet" type="text/css" href="/css/mylab.css"></link>
 	</head>
@@ -165,8 +164,8 @@
 		<script src="/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
 		<script src="/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 		<script src="/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
-		<script src="/js/jquery-accordion-menu.js"></script>
-		
+		<script src="/js/mylab.js"></script>
+
 		<script>
 		    var $logTable = $('#logTable'),
 		    	$hisLogTable = $("#hisLogTable"),
@@ -207,7 +206,7 @@
 		    		var url = "/stock/position/logLst?status=0";
 		    		$.get(url, function(data) {
 		    			$logTable.bootstrapTable("load", data);
-		    			$("#refreshBtn").html("点击刷新");
+		    			$("#refreshBtn").html("刷新");
 		    		});
 		    	});
 

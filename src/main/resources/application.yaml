@@ -1,0 +1,25 @@
+## Freemarker Config ##
+spring:
+  freemarker:
+    suffix: .ftl
+    allow-request-override: false
+    cache: false
+    check-template-location: true
+    charset: UTF-8
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+    template-loader-path: file:D:\works\github\mylab\src\main\resources\templates
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mylab?characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+    username: root
+    password: jin123
+
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+server:
+  port: 9999
