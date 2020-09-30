@@ -17,8 +17,6 @@
     			<div id="jquery-accordion-menu" class="jquery-accordion-menu">
 					<ul id="demo-list">
 						<li class="active"><a href="#"><i class="fa fa-bar-chart"></i>股海浮沉</a></li>
-						<li class="active"><a href="#"><i class="fa fa-bar-chart"></i>历史交易</a></li>
-						<li class="active"><a href="#"><i class="fa fa-bar-history"></i>股票管理</a></li>
 					</ul>
 				</div>
     		</div>
@@ -26,19 +24,18 @@
 			<div class="main">
 				<div class="page-header">
 					<ol class="breadcrumb">
-					    <li><a href="#">当前持仓</a></li>
-					    <li><a href="#">历史交易</a></li>
-					    <li><a href="#">股票管理</a></li>
+					    <li><a href="#">股海浮沉</a></li>
 				    </ol>
 				</div>
 
 				<div class="page-content">
 					<div class="tabbable">
-	        			<ul id="stockTab" class="nav nav-tabs">
+	        			<ul id="stockTabs" class="nav nav-tabs">
 						    <li>
 						    	<a href="#logTab" tblId="#logTable" data-toggle="tab">当前持仓</a>
 						    </li>
 	    					<li><a href="#hisLogTab" tblId="#hisLogTable" data-toggle="tab">历史记录</a></li>
+	    					<li><a href="#stockTab" tblId="#stockTable" data-toggle="tab">股票管理</a></li>
 	    				</ul>
 				    				
 	    				<div id="stockTabContent" class="tab-content">
@@ -46,10 +43,8 @@
 								<div id="toolbar" class="toolbar" style="height: 33px;">
 									<a id="buyBtn" class="btn btn-primary" href="javascript:">买入</a>
 									<a id="sellBtn" class="btn btn-primary" href="javascript:">卖出</a>
-									<a id="addStockBtn" class="btn btn-primary" href="javascript:">添加股票</a>
 									<a id="refreshBtn" class="btn btn-primary" href="javascript:">刷新</a>
 									<a id="delBtn" class="btn btn-danger" href="javascript:">删除</a>
-									<span class="alert"></span>
 								</div>
 										
 								<table id="logTable"
@@ -122,6 +117,35 @@
 		                            </thead>
 						        </table>
 						    </div>
+
+						    <div class="tab-pane" id="stockTab">
+                                <div id="toolbar2" class="toolbar" style="height: 33px;">
+                                    <a id="addStockBtn" class="btn btn-primary" href="javascript:">新增</a>
+                                    <a id="delStockBtn" class="btn btn-danger" href="javascript:">删除</a>
+                                </div>
+
+                                <table id="stockTable"
+                                    data-toggle="table"
+                                    data-url="/stock/stockLst"
+                                    data-search='true'
+                                    data-show-toggle='true'
+                                    data-show-columns='true'
+                                    data-height='528'
+                                    data-show-footer='false'
+                                    data-click-to-select='true'
+                                    data-toolbar='#toolbar2'
+                                    data-striped="true"
+                                    data-sort-stable='true'
+                                    data-check-radio='true'>
+                                    <thead>
+                                        <tr>
+                                            <th data-radio="true" data-width="30"></th>
+                                            <th data-field="stockNo" data-width="120">股票代码</th>
+                                            <th data-field="stockNm">股票名称</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
 						</div>
 	    			</div>
 					    
@@ -146,13 +170,12 @@
 		<script>
 		    var $logTable = $('#logTable'),
 		    	$hisLogTable = $("#hisLogTable"),
+		    	$stockTable = $("#stockTable"),
 		        $stockModal = $('#stockModal').modal({show: false});
 		        
 		    $(function () {
-		    	jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
-		    
-		    	$('#stockTab li:eq(0) a').tab('show');
-		    	$('#stockTab a').click(function (e) {
+		    	$('#stockTabs li:eq(0) a').tab('show');
+		    	$('#stockTabs a').click(function (e) {
 		    		e.preventDefault();
 		    		$(this).tab('show');
 		    		$($(this).attr("tblId")).bootstrapTable("resetView");
@@ -223,6 +246,34 @@
 		        		$stockModal.modal('show');
 		        	});
 		    	});
+
+		    	$("#delStockBtn").click(function() {
+                    var rows = $stockTable.bootstrapTable('getSelections');
+                    if (rows && rows.length == 1) {
+                        if (confirm("确认删除?")) {
+                            $.ajax({
+                                url: "/stock/delStock",
+                                type: 'post',
+                                data: {
+                                    stockNo : rows[0].stockNo
+                                },
+                                success: function (data) {
+                                    if (data == "succ") {
+                                        alert('删除成功!');
+                                        $stockTable.bootstrapTable('refresh');
+                                    } else {
+                                        alert(data);
+                                    }
+                                },
+                                error: function (data) {
+                                    alert('删除失败:' + data);
+                                }
+                            });
+                        }
+                    } else {
+                        alert("请选择一条记录");
+                    }
+                });
 		    });
 		    
 		    function profitFormatter(value) {

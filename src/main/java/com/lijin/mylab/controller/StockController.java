@@ -6,6 +6,7 @@ import com.lijin.mylab.dao.mybatis.mapper.StockInfoMapper;
 import com.lijin.mylab.dao.mybatis.mapper.StockPositionLogMapper;
 import com.lijin.mylab.dao.mybatis.model.StockInfo;
 import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
+import com.lijin.mylab.entity.AjaxResult;
 import com.lijin.mylab.entity.IEntityTransfer;
 import com.lijin.mylab.enums.PositionLogStatus;
 import org.apache.commons.beanutils.BeanUtils;
@@ -101,6 +102,13 @@ public class StockController extends BaseController {
 		
 		return lst;
 	}
+
+	@RequestMapping(path = "/stockLst", method = RequestMethod.GET)
+	public @ResponseBody List<Map<String, String>> stockLst() {
+		List<StockInfo> stockLst = stockInfoCache.getStockList();
+		List<Map<String, String>> lst = transferLst(stockLst, null);
+		return lst;
+	}
 	
 	@RequestMapping(path = "/addStock", method = RequestMethod.GET)
 	public String addStock() {
@@ -119,6 +127,18 @@ public class StockController extends BaseController {
 		} else {
 			logger.info(stockNo + " 已存在，无需重复添加");
 		}
+		return "succ";
+	}
+
+	@RequestMapping(path = "/delStock", method = RequestMethod.POST)
+	public @ResponseBody String delStock(String stockNo) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("stockNo", stockNo);
+		if (stockPositionLogMapper.countByParamMap(paramMap) > 0) {
+			return stockNo + "有持仓记录，删除失败";
+		}
+		StockInfoMapper.delete(stockNo);
+		stockInfoCache.refresh();
 		return "succ";
 	}
 	

@@ -16,8 +16,8 @@
 	<select id="countByParamMap" resultType="java.lang.Integer" parameterType="Map">
 		select count(*) from tbl_stock_position_log where 1=1
 		<if test="qryParamMap != null">
-			<if test="qryParamMap.positionId != null">
-			and position_id=#{qryParamMap.positionId}
+			<if test="qryParamMap.stockNo != null">
+				and stock_no=#{qryParamMap.stockNo}
 			</if>
 			<if test="qryParamMap.status != null">
 				and status=#{qryParamMap.status}
