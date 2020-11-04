@@ -27,25 +27,20 @@
 	$("#addStockSubmitBtn").click(function () {
 		var stockNo = $stockModal.find('input[name="stockNo"]').val();
 		var stockNm = $stockModal.find('input[name="stockNm"]').val();
-		$.ajax({
-	        url: "/stock/addStock/submit",
-	        type: 'post',
-	        data: {
-	        	stockNo : stockNo,
+		$.ajaxPost("/stock/addStock/submit",
+			{
+				stockNo : stockNo,
 	        	stockNm : stockNm
-	        },
-	        success: function (data) {
+			},
+			function (data) {
 	            $stockModal.modal('hide');
-	            if (data == "succ") {
-	            	alert('添加股票成功!');
-	            } else {
-	            	alert(data);
-	            }
+	            alert('添加股票成功!');
+	            $("#refreshBtn3").trigger("click");
 	        },
-	        error: function (data) {
+	        function (data) {
 	            $stockModal.modal('hide');
 	            alert('添加股票失败!');
 	        }
-	    });
+	    );
 	});
 </script>

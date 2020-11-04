@@ -2,7 +2,6 @@
 <html>
 	<head>
 		<title>错误页面</title>
-		<#include "/common/include.ftl">
 	</head>
 
 	<body>

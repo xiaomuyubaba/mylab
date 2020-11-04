@@ -39,111 +39,27 @@
 				    				
 	    				<div id="stockTabContent" class="tab-content">
 						    <div class="tab-pane active" id="logTab">
-								<div id="toolbar" class="toolbar" style="height: 33px;">
+								<div id="toolbar1" class="toolbar" style="height: 33px;">
 									<a id="buyBtn" class="btn btn-primary" href="javascript:">买入</a>
-									<a id="sellBtn" class="btn btn-primary" href="javascript:">卖出</a>
-									<a id="refreshBtn" class="btn btn-primary" href="javascript:">刷新</a>
-									<a id="delBtn" class="btn btn-danger" href="javascript:">删除</a>
+									<a id="refreshBtn1" class="btn btn-primary" href="javascript:">刷新</a>
 								</div>
-										
-								<table id="logTable"
-									data-toggle="table" 
-						        	data-url="/stock/position/logLst?status=0"
-						        	data-search='true'
-									data-show-toggle='true'
-									data-show-columns='true'
-									data-height='528'
-									data-show-footer='false'
-									data-click-to-select='true'
-									data-toolbar='#toolbar'
-									data-striped="true"
-									data-sort-stable='true'
-									data-check-radio='true'>
-						            <thead>
-			                            <tr>
-			                            	<th data-radio="true" data-width="30"></th>
-			                            	 <th data-field="idx" data-width="40"
-			                            	 	data-align="center"
-			                            	 	data-formatter="idxFormatter"
-			                            	 	>序号</th>
-			                                <th data-field="stockNo" data-width="120">股票代码</th>
-			                                <th data-field="stockNm" data-sortable="true">股票名称</th>
-			                                <th data-field="transNumber">股票数</th>
-			                                <th data-field="buyInDt">买入日期</th>
-			                                <th data-field="buyInAt">买入价</th>
-			                                <th data-field="currPrice"
-			                                	data-formatter="currPriceFormatter">当前价</th>
-			                                <th data-field="prepareSellOutAt"
-			                                	data-formatter="prepareSellOutAtFormatter">计划卖出价</th>
-			                                <th data-field="prepareBuyInAt"
-			                                	data-formatter="prepareBuyInAtFormatter">计划补仓价</th>
-			                                <th data-field="profit"
-			                                	data-sortable="true"
-			                                	data-formatter="profitFormatter">盈亏比</th>
-			                            </tr>
-		                            </thead>
-						        </table>
+								<table id="logTable"></table>
 						    </div>
 						    
 						    <div class="tab-pane" id="hisLogTab">
-						        <table id="hisLogTable" 
-						        	data-toggle="table"
-						        	data-url="/stock/position/logLst?status=1"
-						        	data-show-refresh='true'
-						        	data-search='true'
-									data-show-toggle='true'
-									data-show-columns='true'
-									data-height='528'
-									data-show-footer='false'
-									data-striped="true"
-									data-sort-stable='true'>
-						            <thead>
-			                            <tr>
-			                                <th data-field="stockNo" data-width="120">股票代码</th>
-			                                <th data-field="stockNm">股票名称</th>
-			                                <th data-field="transNumber">股票数</th>
-			                                <th data-field="buyInDt">买入日期</th>
-			                                <th data-field="buyInAt">买入价</th>
-			                                <th data-field="sellOutDt">卖出日期</th>
-			                                <th data-field="sellOutAt">卖出价</th>
-			                                <th data-field="profit"
-			                                	data-sortable="true"
-			                                	data-formatter="profitFormatter">盈亏比</th>
-			                                <th data-field="profitAt"
-			                                	data-sortable="true"
-			                                	data-formatter="profitAtFormatter">盈亏金额</th>
-			                            </tr>
-		                            </thead>
-						        </table>
+						    	<div id="toolbar2" class="toolbar" style="height: 33px;">
+									<a id="refreshBtn2" class="btn btn-primary" href="javascript:">刷新</a>
+								</div>
+						        <table id="hisLogTable"></table>
 						    </div>
 
 						    <div class="tab-pane" id="stockTab">
                                 <div id="toolbar2" class="toolbar" style="height: 33px;">
                                     <a id="addStockBtn" class="btn btn-primary" href="javascript:">新增</a>
-                                    <a id="delStockBtn" class="btn btn-danger" href="javascript:">删除</a>
+                                    <a id="refreshBtn3" class="btn btn-primary" href="javascript:">刷新</a>
                                 </div>
-
-                                <table id="stockTable"
-                                    data-toggle="table"
-                                    data-url="/stock/stockLst"
-                                    data-search='true'
-                                    data-show-toggle='true'
-                                    data-show-columns='true'
-                                    data-height='528'
-                                    data-show-footer='false'
-                                    data-click-to-select='true'
-                                    data-toolbar='#toolbar2'
-                                    data-striped="true"
-                                    data-sort-stable='true'
-                                    data-check-radio='true'>
-                                    <thead>
-                                        <tr>
-                                            <th data-radio="true" data-width="30"></th>
-                                            <th data-field="stockNo" data-width="120">股票代码</th>
-                                            <th data-field="stockNm">股票名称</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                
+                                <table id="stockTable"></table>
                             </div>
 						</div>
 	    			</div>
@@ -167,112 +83,233 @@
 		<script src="/js/mylab.js"></script>
 
 		<script>
-		    var $logTable = $('#logTable'),
+		    var $logTable = $("#logTable"),
 		    	$hisLogTable = $("#hisLogTable"),
 		    	$stockTable = $("#stockTable"),
 		        $stockModal = $('#stockModal').modal({show: false});
 		        
 		    $(function () {
-		    	$('#stockTabs li:eq(0) a').tab('show');
 		    	$('#stockTabs a').click(function (e) {
 		    		e.preventDefault();
 		    		$(this).tab('show');
 		    		$($(this).attr("tblId")).bootstrapTable("resetView");
 				});
+				
+				$("#logTable").mngTable({
+					columns: [
+						{
+							field: "idx",
+							title: "序号",
+							width: 60,
+							formatter: function(v, row, idx, fd) {
+								return idx + 1;
+							}
+						},
+						{
+							field: "stockNo",
+							title: "股票代码",
+							width: 100,
+							sortable: true
+						},
+						{
+							field: "stockNm",
+							title: "股票名称",
+							width: 160
+						},
+						{
+							field: "transNumber",
+							title: "股票数",
+							width: 100
+						},
+						{
+							field: "buyInDt",
+							title: "买入日期",
+							width: 100,
+						},
+						{
+							field: "buyInAt",
+							title: "买入价",
+							width: 90
+						},
+						{
+							field: "currPrice",
+							title: "当前价",
+							width: 90,
+							formatter: currPriceFormatter
+						},
+						{
+							field: "prepareBuyInAt",
+							title: "计划补仓价",
+							width: 120,
+							formatter: prepareBuyInAtFormatter
+						},
+						{
+							field: "profit",
+							title: "盈亏",
+							sortable: true,
+							formatter: profitFormatter
+						},
+						{
+							field: "op",
+							title: "操作",
+							width: 120,
+							formatter: function(v, row, idx, fd) {
+								let btns = '<button type="button" class="tbl-btn sell-btn">卖出</button>';
+								btns = btns + '<button type="button" class="tbl-btn del-btn">删除</button>';
+								return btns;
+							},
+							events: {
+								"click .sell-btn": function(e, val, row, idx) {
+									$.showModal("/stock/sell?logId=" + row.logId, $stockModal);
+								},
+								"click .del-btn": function(e, val, row, idx) {
+									if (confirm("确认删除?")) {
+			                        	$.ajaxPost("/stock/delLog", {logId : row.logId}, 
+			                        		function(ajaxResp) {
+								    			alert('删除成功!');
+			                                    $("#refreshBtn1").trigger("click");
+								    	});
+			                        }
+								}
+							}
+						}
+					]
+				});
 		    	
 		    	$("#buyBtn").click(function() {
-		    		$stockModal.find('.modal-content').html("");
-	    			$.get("/stock/buy", function(data) {
-		        		$stockModal.find('.modal-content').html(data);
-		        		$stockModal.modal('show');
-		        	});
+		    		$.showModal("/stock/buy", $stockModal);
 		    	});
 		    	
-		    	$("#sellBtn").click(function() {
-		    		var rows = $logTable.bootstrapTable('getSelections');
-		    		if (rows && rows.length == 1) {
-		    			$stockModal.find('.modal-content').html("");
-		    			$.get("/stock/sell?logId=" + rows[0].logId, function(data) {
-			        		$stockModal.find('.modal-content').html(data);
-			        		$stockModal.modal('show');
-			        	});
-		    		} else {
-		    			alert("请选择一条记录");
-		    		}
-		    	});
-		    	
-		    	$("#refreshBtn").click(function() {
-		    		$(this).html("刷新中...");
-		    		var url = "/stock/position/logLst?status=0";
-		    		$.get(url, function(data) {
-		    			$logTable.bootstrapTable("load", data);
-		    			$("#refreshBtn").html("刷新");
+		    	$("#refreshBtn1").click(function() {
+		    		$("#refreshBtn1").html("刷新中...");
+		    		$.ajaxPost("/stock/position/logLst", {status:"0"}, function(respData) {
+		    			$logTable.bootstrapTable("load", respData.logLst);
+		    			$("#refreshBtn1").html("刷新");
 		    		});
 		    	});
-
-		    	$("#delBtn").click(function() {
-		    	    var rows = $logTable.bootstrapTable('getSelections');
-                    if (rows && rows.length == 1) {
-                        if (confirm("确认删除?")) {
-                            $.ajax({
-                                url: "/stock/delLog",
-                                type: 'post',
-                                data: {
-                                    logId : rows[0].logId
-                                },
-                                success: function (data) {
-                                    if (data == "succ") {
-                                        alert('删除成功!');
-                                        $logTable.bootstrapTable('refresh');
-                                    } else {
-                                        alert(data);
-                                    }
-                                },
-                                error: function (data) {
-                                    alert('删除失败:' + data);
-                                }
-                            });
-                        }
-                    } else {
-                        alert("请选择一条记录");
-                    }
+		    	
+		    	$("#hisLogTable").mngTable({
+					columns: [
+						{
+							field: "idx",
+							title: "序号",
+							width: 60,
+							formatter: function(v, row, idx, fd) {
+								return idx + 1;
+							}
+						},
+						{
+							field: "stockNo",
+							title: "股票代码",
+							width: 100,
+							sortable: true
+						},
+						{
+							field: "stockNm",
+							title: "股票名称",
+							width: 160
+						},
+						{
+							field: "transNumber",
+							title: "股票数",
+							width: 100
+						},
+						{
+							field: "buyInDt",
+							title: "买入日期",
+							width: 100,
+							sortable: true
+						},
+						{
+							field: "buyInAt",
+							title: "买入价",
+							width: 90
+						},
+						{
+							field: "sellOutDt",
+							title: "卖出日期",
+							width: 90,
+							sortable: true
+						},
+						{
+							field: "sellOutAt",
+							title: "卖出价",
+							width: 90
+						},
+						{
+							field: "profit",
+							title: "盈亏",
+							sortable: true,
+							formatter: profitFormatter
+						},
+						{
+							field: "profitAt",
+							title: "盈亏金额",
+							width: 120,
+							sortable: true,
+							formatter: profitAtFormatter
+						}
+					]
+				});
+				
+				$("#refreshBtn2").click(function() {
+		    		$("#refreshBtn2").html("刷新中...");
+		    		$.ajaxPost("/stock/position/logLst", {status:"1"}, function(respData) {
+		    			$hisLogTable.bootstrapTable("load", respData.logLst);
+		    			$("#refreshBtn2").html("刷新");
+		    		});
+		    	});
+				
+				$("#stockTable").mngTable({
+					columns: [
+						{
+							field: "stockNo",
+							title: "股票代码",
+							width: 100,
+							sortable: true
+						},
+						{
+							field: "stockNm",
+							title: "股票名称"
+						},
+						{
+							field: "op",
+							title: "操作",
+							width: 120,
+							formatter: function(v, row, idx, fd) {
+								return '<button type="button" class="tbl-btn del-btn">删除</button>';
+							},
+							events: {
+								"click .del-btn": function(e, val, row, idx) {
+									if (confirm("确认删除?")) {
+			                        	$.ajaxPost("/stock/delStock", {stockNo : row.stockNo}, 
+			                        		function(ajaxResp) {
+								    			alert('删除成功!');
+			                                    $("#refreshBtn3").trigger("click");
+								    	});
+			                        }
+								}
+							}
+						}
+					]
+				});
+				
+				$("#addStockBtn").click(function() {
+		    		$.showModal("/stock/addStock", $stockModal);
+		    	});
+				
+				$("#refreshBtn3").click(function() {
+		    		$("#refreshBtn3").html("刷新中...");
+		    		$.ajaxPost("/stock/stockLst", null, function(respData) {
+		    			$stockTable.bootstrapTable("load", respData.stockLst);
+		    			$("#refreshBtn3").html("刷新");
+		    		});
 		    	});
 		    	
-		    	$("#addStockBtn").click(function() {
-	    			$stockModal.find('.modal-content').html("");
-	    			$.get("/stock/addStock", function(data) {
-		        		$stockModal.find('.modal-content').html(data);
-		        		$stockModal.modal('show');
-		        	});
-		    	});
-
-		    	$("#delStockBtn").click(function() {
-                    var rows = $stockTable.bootstrapTable('getSelections');
-                    if (rows && rows.length == 1) {
-                        if (confirm("确认删除?")) {
-                            $.ajax({
-                                url: "/stock/delStock",
-                                type: 'post',
-                                data: {
-                                    stockNo : rows[0].stockNo
-                                },
-                                success: function (data) {
-                                    if (data == "succ") {
-                                        alert('删除成功!');
-                                        $stockTable.bootstrapTable('refresh');
-                                    } else {
-                                        alert(data);
-                                    }
-                                },
-                                error: function (data) {
-                                    alert('删除失败:' + data);
-                                }
-                            });
-                        }
-                    } else {
-                        alert("请选择一条记录");
-                    }
-                });
+		    	$('#stockTabs li:eq(0) a').tab('show');
+		    	$("#refreshBtn1").trigger("click");
+		    	$("#refreshBtn2").trigger("click");
+		    	$("#refreshBtn3").trigger("click");
 		    });
 		    
 		    function profitFormatter(value) {

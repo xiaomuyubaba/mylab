@@ -19,9 +19,8 @@ public class BeanUtil extends BeanUtils {
 	
 	static {
 		ConvertUtils.register(new Converter() {
-			@SuppressWarnings({ "unchecked", "rawtypes" })
-			@Override
-			public Object convert(Class clazz, Object value) {
+			@SuppressWarnings("unchecked")
+			public Object convert(@SuppressWarnings("rawtypes") Class clazz, Object value) {
 				if (value == null) {
 					return null;
 				} else {

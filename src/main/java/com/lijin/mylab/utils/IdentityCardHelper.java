@@ -7,8 +7,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+/**
+ * 身份证号码校验
+ * @author jin
+ *
+ */
 public class IdentityCardHelper {
-
 
 
 	private static final Pattern IDENTITY_CARD_NUMBER_PATTERN = Pattern.compile("^\\d{15}(\\d{2}[\\dx])?$",Pattern.CASE_INSENSITIVE);
@@ -92,6 +96,11 @@ public class IdentityCardHelper {
 		return false;
 	}
 
+	/**
+	 * 判断最后一位校验码是否有效
+	 * @param credentialNumber
+	 * @return
+	 */
 	public static boolean isValidVerifyCode(String credentialNumber) {
 		char[] chars = credentialNumber.substring(0, 17).toCharArray();
 		int[] ints = new int[17];
@@ -136,7 +145,7 @@ public class IdentityCardHelper {
     }
     
     public static void main(String[] args){
-      System.out.println(isValidIdentityCardNumber("310103199201011979"));	
+      System.out.println(isValidIdentityCardNumber("31010319920101197X"));	
 
     }
 }
