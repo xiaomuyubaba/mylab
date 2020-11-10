@@ -20,25 +20,25 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-    <button id="addStockSubmitBtn" type="button" class="btn btn-primary submit">提交</button>
+    <button id="add-stock-submit-btn" type="button" class="btn btn-primary submit">提交</button>
 </div>
 
 <script>
-	$("#addStockSubmitBtn").click(function () {
+	$("#add-stock-submit-btn").click(function () {
 		var stockNo = $stockModal.find('input[name="stockNo"]').val();
 		var stockNm = $stockModal.find('input[name="stockNm"]').val();
-		$.ajaxPost("/stock/addStock/submit",
+		$.ajaxPost("/stock/stock/add/submit",
 			{
 				stockNo : stockNo,
 	        	stockNm : stockNm
 			},
 			function (data) {
-	            $stockModal.modal('hide');
+	            $stockMngModal.modal('hide');
 	            alert('添加股票成功!');
-	            $("#refreshBtn3").trigger("click");
+	            $("#refresh-btn").trigger("click");
 	        },
 	        function (data) {
-	            $stockModal.modal('hide');
+	            $stockMngModal.modal('hide');
 	            alert('添加股票失败!');
 	        }
 	    );

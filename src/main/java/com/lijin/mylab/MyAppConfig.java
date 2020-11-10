@@ -1,5 +1,7 @@
 package com.lijin.mylab;
 
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,5 +16,5 @@ public class MyAppConfig implements WebMvcConfigurer {
 		registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**");
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
-	
+
 }

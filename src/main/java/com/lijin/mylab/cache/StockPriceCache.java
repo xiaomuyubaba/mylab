@@ -1,7 +1,8 @@
 package com.lijin.mylab.cache;
 
-import com.lijin.mylab.dao.mybatis.mapper.StockPositionLogMapper;
+import com.lijin.mylab.dao.StockPositionLogDAO;
 import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
+import com.lijin.mylab.enums.PositionLogStatus;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -10,7 +11,6 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-@Configurable
 public class StockPriceCache {
 	
 	private static final Logger logger = LoggerFactory.getLogger(StockPriceCache.class);
@@ -28,7 +27,7 @@ public class StockPriceCache {
 	private Map<String, BigDecimal> priceCache = new ConcurrentHashMap<String, BigDecimal>();
 	
 	@Autowired
-	private StockPositionLogMapper stockPositionLogMapper;
+	private StockPositionLogDAO stockPositionLogDAO;
 	
 	public BigDecimal getCurrPrice(String stockNo) {
 		return priceCache.get(stockNo);
@@ -41,9 +40,9 @@ public class StockPriceCache {
     public void refresh(){
     	logger.info("刷新股票价格开始");
     	
-    	Map<String, Object> paramMap = new HashMap<>();
-    	paramMap.put("status", "0");
-    	List<StockPositionLog> pLst = stockPositionLogMapper.selectByParamMap(paramMap);
+    	Map<String, String> paramMap = new HashMap<>();
+    	paramMap.put("status", PositionLogStatus._0.getCode());
+    	List<StockPositionLog> pLst = stockPositionLogDAO.select(paramMap);
 		Map<String, BigDecimal> priceCacheTmp = new ConcurrentHashMap<String, BigDecimal>();
 		pLst.forEach((log) -> {
 			String stockNo = log.getStockNo();

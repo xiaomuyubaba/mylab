@@ -7,13 +7,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lijin.mylab.dao.StockInfoDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.lijin.mylab.dao.mybatis.mapper.StockInfoMapper;
 import com.lijin.mylab.dao.mybatis.model.StockInfo;
 
 @Component
@@ -22,7 +22,7 @@ public class StockInfoCache implements InitializingBean {
 	private static final Logger logger = LoggerFactory.getLogger(StockInfoCache.class);
 	
 	@Autowired
-	private StockInfoMapper stockInfoMapper;
+	private StockInfoDAO stockInfoDAO;
 	
 	private List<StockInfo> stockList = new ArrayList<>();
 	private Map<String, String> stockMap = new HashMap<>();
@@ -39,7 +39,7 @@ public class StockInfoCache implements InitializingBean {
 	 */
 	private synchronized void init() {
 		logger.info("##init stock info cache started##");
-		stockList = stockInfoMapper.selectAll();
+		stockList = stockInfoDAO.selectAll();
 		stockMap = new LinkedHashMap<String, String>();
 		for (StockInfo stockInfo : stockList) {
 			stockMap.put(stockInfo.getStockNo(), stockInfo.getStockNm());

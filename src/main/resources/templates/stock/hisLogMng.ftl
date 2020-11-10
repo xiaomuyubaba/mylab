@@ -11,69 +11,74 @@
 	</head>
 	
 	<body>
-		<div>
-    		<div class="sidebar">
-    			<div id="jquery-accordion-menu" class="jquery-accordion-menu">
-					<ul id="demo-list">
-						<li class="active"><a href="#"><i class="fa fa-bar-chart"></i>股海浮沉</a></li>
+		<div id="sidebar">
+			<ul class="side-menu">
+				<li class="active">
+					<a href="#" title="股海浮沉"><i class="fa fa-bar-chart"></i></a>
+					<ul>
+						<li><a href="#">当前持仓</a></li>
+						<li><a href="#">历史记录</a></li>
+						<li><a href="#">股票管理</a></li>
 					</ul>
-				</div>
-    		</div>
-	    		
-			<div class="main">
-				<div class="page-header">
-					<ol class="breadcrumb">
-					    <li><a href="#">股海浮沉</a></li>
-				    </ol>
-				</div>
+				</li>
+			</ul>
+		</div>
+    		
+		<div id="main">
+			<div id="main-top">
+				<ul id="breadcrumb">
+					<li><a href="#"><i class="fa fa-home"></i></a></li>
+				    <li><a href="#">股海浮沉</a></li>
+				    <li><a href="#">当前持仓</a></li>
+			    </ul>
+			</div>
 
-				<div class="page-content">
-					<div class="tabbable">
-	        			<ul id="stockTabs" class="nav nav-tabs">
-						    <li>
-						    	<a href="#logTab" tblId="#logTable" data-toggle="tab">当前持仓</a>
-						    </li>
-	    					<li><a href="#hisLogTab" tblId="#hisLogTable" data-toggle="tab">历史记录</a></li>
-	    					<li><a href="#stockTab" tblId="#stockTable" data-toggle="tab">股票管理</a></li>
-	    				</ul>
-				    				
-	    				<div id="stockTabContent" class="tab-content">
-						    <div class="tab-pane active" id="logTab">
-								<div id="toolbar1" class="toolbar" style="height: 33px;">
-									<a id="buyBtn" class="btn btn-primary" href="javascript:">买入</a>
-									<a id="refreshBtn1" class="btn btn-primary" href="javascript:">刷新</a>
-								</div>
-								<table id="logTable"></table>
-						    </div>
-						    
-						    <div class="tab-pane" id="hisLogTab">
-						    	<div id="toolbar2" class="toolbar" style="height: 33px;">
-									<a id="refreshBtn2" class="btn btn-primary" href="javascript:">刷新</a>
-								</div>
-						        <table id="hisLogTable"></table>
-						    </div>
-
-						    <div class="tab-pane" id="stockTab">
-                                <div id="toolbar2" class="toolbar" style="height: 33px;">
-                                    <a id="addStockBtn" class="btn btn-primary" href="javascript:">新增</a>
-                                    <a id="refreshBtn3" class="btn btn-primary" href="javascript:">刷新</a>
-                                </div>
-                                
-                                <table id="stockTable"></table>
-                            </div>
-						</div>
-	    			</div>
+			<div id="main-content">
+				<div class="tabbable">
+        			<ul id="stockTabs" class="nav nav-tabs">
+					    <li>
+					    	<a href="#logTab" tblId="#logTable" data-toggle="tab">当前持仓</a>
+					    </li>
+    					<li><a href="#hisLogTab" tblId="#hisLogTable" data-toggle="tab"></a></li>
+    					<li><a href="#stockTab" tblId="#stockTable" data-toggle="tab"></a></li>
+    				</ul>
+			    				
+    				<div id="stockTabContent" class="tab-content">
+					    <div class="tab-pane active" id="logTab">
+							<div id="toolbar1" class="toolbar" style="height: 33px;">
+								<a id="buyBtn" class="btn btn-primary" href="javascript:">买入</a>
+								<a id="refreshBtn1" class="btn btn-primary" href="javascript:">刷新</a>
+							</div>
+							<table id="logTable"></table>
+					    </div>
 					    
-				    <div id="stockModal" class="modal fade">
-				        <div class="modal-dialog">
-				            <div class="modal-content">
-				            </div>
-				        </div>
+					    <div class="tab-pane" id="hisLogTab">
+					    	<div id="toolbar2" class="toolbar" style="height: 33px;">
+								<a id="refreshBtn2" class="btn btn-primary" href="javascript:">刷新</a>
+							</div>
+					        <table id="hisLogTable"></table>
+					    </div>
+
+					    <div class="tab-pane" id="stockTab">
+                            <div id="toolbar2" class="toolbar" style="height: 33px;">
+                                <a id="addStockBtn" class="btn btn-primary" href="javascript:">新增</a>
+                                <a id="refreshBtn3" class="btn btn-primary" href="javascript:">刷新</a>
+                            </div>
+                            
+                            <table id="stockTable"></table>
+                        </div>
 					</div>
+    			</div>
+				    
+			    <div id="stockModal" class="modal fade">
+			        <div class="modal-dialog">
+			            <div class="modal-content">
+			            </div>
+			        </div>
 				</div>
 			</div>
 		</div>
-		
+
 		<script src="/js/jquery.min.js"></script>
 		<script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 		<script src="/bootstrap-table/bootstrap-table.js"></script>

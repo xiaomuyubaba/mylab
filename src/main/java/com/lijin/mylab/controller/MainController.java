@@ -8,7 +8,7 @@ public class MainController extends BaseController {
 
 	@GetMapping("/")
 	public String index() {
-		return "stock/index";
+		return "main";
 	}
 
 }

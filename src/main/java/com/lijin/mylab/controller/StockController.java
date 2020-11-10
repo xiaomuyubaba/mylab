@@ -1,30 +1,26 @@
 package com.lijin.mylab.controller;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.lijin.mylab.cache.StockInfoCache;
+import com.lijin.mylab.cache.StockPriceCache;
+import com.lijin.mylab.dao.StockInfoDAO;
+import com.lijin.mylab.dao.StockPositionLogDAO;
+import com.lijin.mylab.dao.mybatis.model.StockInfo;
+import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
+import com.lijin.mylab.entity.AjaxResult;
+import com.lijin.mylab.enums.PositionLogStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.lijin.mylab.cache.StockInfoCache;
-import com.lijin.mylab.cache.StockPriceCache;
-import com.lijin.mylab.dao.mybatis.mapper.StockInfoMapper;
-import com.lijin.mylab.dao.mybatis.mapper.StockPositionLogMapper;
-import com.lijin.mylab.dao.mybatis.model.StockInfo;
-import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
-import com.lijin.mylab.entity.AjaxResult;
-import com.lijin.mylab.enums.PositionLogStatus;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 @Controller
 @RequestMapping("/stock")
@@ -37,36 +33,24 @@ public class StockController extends BaseController {
 	@Autowired
 	private StockPriceCache stockPriceCache;
 	@Autowired
-	private StockPositionLogMapper stockPositionLogMapper;
+	private StockPositionLogDAO stockPositionLogDAO;
 	@Autowired
-	private StockInfoMapper StockInfoMapper;
+	private StockInfoDAO stockInfoDAO;
 	
-	@RequestMapping(path = "/index", method = RequestMethod.GET)
-	public String index() {
-		return "stock/index";
+	@GetMapping("/position/mng")
+	public String positionMng() {
+		return "stock/positionMng";
 	}
 	
-	@RequestMapping(path = "/position/logLst", method = RequestMethod.POST)
-	public @ResponseBody AjaxResult positionLogLst(String status) {
-		// 查询仓位情况列表
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("status", status);
-		List<StockPositionLog> pLst = stockPositionLogMapper.selectByParamMap(paramMap);
-		
-		if (PositionLogStatus._0.getCode().equals(status)) {
-			stockPriceCache.refresh();
-		}
-		
-		List<Map<String, String>> lst = null;
-		
-		if (PositionLogStatus._0.getCode().equals(status)) {
-			lst = commonBO.transferLst(pLst, this::transferHoldingStockPositionLog);
-		} else if (PositionLogStatus._1.getCode().equals(status)) {
-			lst = commonBO.transferLst(pLst, this::transferHisStockPositionLog);
-		} else {
-			return commonBO.buildErrorResp("非法状态");
-		}
-		
+	@PostMapping("/position/qry")
+	public @ResponseBody AjaxResult qryPosition() {
+		Map<String, String> qryParamMap = this.getQryParamMap();
+		qryParamMap.put("status", PositionLogStatus._0.getCode());
+		List<StockPositionLog> pLst = stockPositionLogDAO.select(qryParamMap);
+		List<Map<String, String>> lst = commonBO.transferLst(pLst, this::transferHoldingStockPositionLog);;
+
+		stockPriceCache.refresh();
+
 		Collections.sort(lst, new Comparator<Map<String, String>>() {
 			@Override
 			public int compare(Map<String, String> o1, Map<String, String> o2) {
@@ -81,101 +65,134 @@ public class StockController extends BaseController {
 			}
 		});
 		
-		return commonBO.buildSuccResp("logLst", lst);
+		return buildSuccResp("logLst", lst);
 	}
 	
-	@RequestMapping(path = "/stockLst", method = RequestMethod.POST)
-	public @ResponseBody AjaxResult stockLst() {
-		List<StockInfo> stockLst = stockInfoCache.getStockList();
-		return commonBO.buildSuccResp("stockLst", commonBO.transferLst(stockLst, null));
-	}
-	
-	@RequestMapping(path = "/addStock", method = RequestMethod.GET)
-	public String addStock() {
-		return "stock/addStock";
-	}
-	
-	@RequestMapping(path = "/addStock/submit", method = RequestMethod.POST)
-	public @ResponseBody AjaxResult addStockSubmit(String stockNo, String stockNm) {
-		if (!stockInfoCache.isExist(stockNo)) {
-			StockInfo stockInfo = new StockInfo();
-			stockInfo.setStockNo(stockNo.toUpperCase());
-			stockInfo.setStockNm(stockNm);
-			StockInfoMapper.add(stockInfo);
-			stockInfoCache.refresh();
-			stockPriceCache.refresh();
-		} else {
-			logger.info(stockNo + " 已存在，无需重复添加");
-		}
-		return commonBO.buildSuccResp();
-	}
-
-	@RequestMapping(path = "/delStock", method = RequestMethod.POST)
-	public @ResponseBody AjaxResult delStock(String stockNo) {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("stockNo", stockNo);
-		if (stockPositionLogMapper.countByParamMap(paramMap) > 0) {
-			return commonBO.buildErrorResp(stockNo + "有持仓记录，删除失败");
-		}
-		
-		StockInfoMapper.delete(stockNo);
-		stockInfoCache.refresh();
-		
-		return commonBO.buildSuccResp();
-	}
-	
-	@RequestMapping(path = "/buy", method = RequestMethod.GET)
+	@GetMapping("/position/buy")
 	public String buy(Model model) {
 		model.addAttribute("stockList", stockInfoCache.getStockList());
 		return "stock/buy";
 	}
 	
-	@RequestMapping(path = "/buy/submit", method = RequestMethod.POST)
+	@PostMapping("/position/buy/submit")
 	public @ResponseBody AjaxResult buySubmit(String stockNo, String buyInDt, int buyInNum, String buyInAt) {
 		StockPositionLog log = new StockPositionLog();
 		log.setStockNo(stockNo);
 		log.setBuyInAt(new BigDecimal(buyInAt).movePointRight(2).intValue());
 		log.setBuyInDt(buyInDt);
 		log.setTransNumber(buyInNum);
-		stockPositionLogMapper.add(log);
-		return commonBO.buildSuccResp();
+		stockPositionLogDAO.add(log);
+		return buildSuccResp();
 	}
 	
-	@RequestMapping(path = "/sell", method = RequestMethod.GET)
+	@GetMapping("/position/sell")
 	public String sell(Model model, int logId) {
-		StockPositionLog log = stockPositionLogMapper.selectByLogId(logId);
+		StockPositionLog log = stockPositionLogDAO.selectByLogId(logId);
 		Map<String, String> logInfo = commonBO.transferEntity(log, this::transferHoldingStockPositionLog);
 		model.addAttribute("logInfo", logInfo);
 		return "stock/sell";
 	}
 
-	@RequestMapping(path = "/sell/submit", method = RequestMethod.POST)
+	@PostMapping("/position/sell/submit")
 	public @ResponseBody AjaxResult sellSubmit(int logId, String sellOutDt, String sellOutAt) {
-		StockPositionLog log = stockPositionLogMapper.selectByLogId(logId);
+		StockPositionLog log = stockPositionLogDAO.selectByLogId(logId);
 		if (log == null) {
-			return commonBO.buildErrorResp("未找到持仓记录:" + logId);
+			return buildErrorResp("未找到持仓记录:" + logId);
 		}
 		log.setSellOutDt(sellOutDt);
 		log.setSellOutAt(new BigDecimal(sellOutAt).movePointRight(2).intValue());
 		log.setStatus(PositionLogStatus._1.getCode());
-		stockPositionLogMapper.upd(log);
-		return commonBO.buildSuccResp();
+		stockPositionLogDAO.upd(log);
+		return buildSuccResp();
 	}
 
-	@RequestMapping(path = "/delLog", method = RequestMethod.POST)
+	@PostMapping("/delLog")
 	public @ResponseBody AjaxResult delLog(int logId) {
-		StockPositionLog log = stockPositionLogMapper.selectByLogId(logId);
+		StockPositionLog log = stockPositionLogDAO.selectByLogId(logId);
 		if (log == null) {
-			return commonBO.buildErrorResp("未找到持仓记录:" + logId);
+			return buildErrorResp("未找到持仓记录:" + logId);
 		}
-		stockPositionLogMapper.delete(logId);
-		return commonBO.buildSuccResp();
+		stockPositionLogDAO.del(logId);
+		return buildSuccResp();
 	}
 	
-	@RequestMapping(path = "/delPositionLog", method = RequestMethod.POST)
+	@PostMapping("/delPositionLog")
 	public @ResponseBody AjaxResult delPositionLog(int logId) {
-		stockPositionLogMapper.delete(logId);;
-		return commonBO.buildSuccResp();
+		stockPositionLogDAO.del(logId);;
+		return buildSuccResp();
+	}
+	
+	@GetMapping(path = "/hisLog/mng")
+	public String hisLogMng() {
+		return "stock/hisLogMng";
+	}
+
+	@PostMapping("/hisLog/qry")
+	public @ResponseBody AjaxResult qryHisLog() {
+		// 查询仓位情况列表
+		Map<String, String> qryParamMap = this.getQryParamMap();
+		qryParamMap.put("status", PositionLogStatus._1.getCode());
+		List<StockPositionLog> pLst = stockPositionLogDAO.select(qryParamMap);
+		List<Map<String, String>> lst = commonBO.transferLst(pLst, this::transferHisStockPositionLog);;
+
+		Collections.sort(lst, new Comparator<Map<String, String>>() {
+			@Override
+			public int compare(Map<String, String> o1, Map<String, String> o2) {
+				String status = o1.get("status");
+				if (PositionLogStatus._0.getCode().equals(status)) {
+					BigDecimal bd1 = new BigDecimal(o1.get("profit"));
+					BigDecimal bd2 = new BigDecimal(o2.get("profit"));
+					return bd2.compareTo(bd1);
+				} else {
+					return o2.get("sellOutDt").compareTo(o1.get("sellOutDt"));
+				}
+			}
+		});
+
+		return buildSuccResp("logLst", lst);
+	}
+	
+	@GetMapping("/stock/mng")
+	public String stockMng() {
+		return "stock/stockMng";
+	}
+	
+	
+	@PostMapping("/stock/qry")
+	public @ResponseBody AjaxResult qryStock() {
+		List<StockInfo> stockLst = stockInfoCache.getStockList();
+		return buildSuccResp("stockLst", commonBO.transferLst(stockLst, null));
+	}
+	
+	@GetMapping("/stock/add")
+	public String addStock() {
+		return "stock/addStock";
+	}
+	
+	@PostMapping("/stock/add/submit")
+	public @ResponseBody AjaxResult addStockSubmit(String stockNo, String stockNm) {
+		if (!stockInfoCache.isExist(stockNo)) {
+			StockInfo stockInfo = new StockInfo();
+			stockInfo.setStockNo(stockNo.toUpperCase());
+			stockInfo.setStockNm(stockNm);
+			stockInfoDAO.add(stockInfo);
+			stockInfoCache.refresh();
+		} else {
+			logger.info(stockNo + " 已存在，无需重复添加");
+		}
+		return buildSuccResp();
+	}
+
+	@PostMapping("/stock/del")
+	public @ResponseBody AjaxResult delStock(String stockNo) {
+		Map<String, String> qryParamMap = new HashMap<>();
+		qryParamMap.put("stockNo", stockNo);
+		if (stockPositionLogDAO.count(qryParamMap) > 0) {
+			return buildErrorResp(stockNo + "有持仓记录，删除失败");
+		}
+		stockInfoDAO.del(stockNo);
+		stockInfoCache.refresh();
+		return buildSuccResp();
 	}
 	
 	private void transferHoldingStockPositionLog(Map<String, String> m) {
