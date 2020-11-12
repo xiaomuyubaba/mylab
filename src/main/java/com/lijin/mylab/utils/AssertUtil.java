@@ -1,9 +1,9 @@
 package com.lijin.mylab.utils;
 
+import com.lijin.mylab.exception.BizzException;
+
 import java.util.Collection;
 import java.util.Map;
-
-import com.lijin.mylab.exception.BizzException;
 
 
 public class AssertUtil {
@@ -36,10 +36,10 @@ public class AssertUtil {
 			throw new BizzException(msg);
 		}
 	}
-	
+
 	/**
-	 * 验证对象是否为null，如果是null，则抛运行时异常，异常信息可以自己指定
-	 * @param o
+	 * 验证字符串是否为空，如果是，则抛运行时异常，异常信息可以自己指定
+	 * @param str
 	 * @param msg
 	 */
 	public static void strIsNotBlank(String str, String msg) {

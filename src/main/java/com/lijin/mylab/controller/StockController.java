@@ -47,10 +47,9 @@ public class StockController extends BaseController {
 		Map<String, String> qryParamMap = this.getQryParamMap();
 		qryParamMap.put("status", PositionLogStatus._0.getCode());
 		List<StockPositionLog> pLst = stockPositionLogDAO.select(qryParamMap);
-		List<Map<String, String>> lst = commonBO.transferLst(pLst, this::transferHoldingStockPositionLog);;
 
 		stockPriceCache.refresh();
-
+		List<Map<String, String>> lst = commonBO.transferLst(pLst, this::transferHoldingStockPositionLog);;
 		Collections.sort(lst, new Comparator<Map<String, String>>() {
 			@Override
 			public int compare(Map<String, String> o1, Map<String, String> o2) {

@@ -46,7 +46,7 @@ public class MyInterceptor extends HandlerInterceptorAdapter {
             });
         }
 
-        if (qryParamMap != null) {
+        if (qryParamMap != null && qryParamMap.isEmpty()) {
             req.setAttribute(Constant.REQ_KEY_QRY_PARAM_MAP, qryParamMap);
             if (logger.isDebugEnabled()) {
                 logger.debug("qryParamMap: {}", qryParamMap.toString());

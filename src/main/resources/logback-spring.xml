@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<springProfile name="dev">
-    <configuration>
-        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern>[%d][HH:mm:ss.SSS][%thread][%-1level][%logger{1}] - %msg%n</pattern>
-            </encoder>
-        </appender>
-        <logger name="com.lijin" level="INFO"/>
-        <root level="INFO">
-            <appender-ref ref="STDOUT"/>
-        </root>
-    </configuration>
-</springProfile>
-
-<springProfile name="prod">
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>[%d][HH:mm:ss.SSS][%thread][%-1level][%logger{1}] - %msg%n</pattern>
         </encoder>
@@ -26,18 +11,24 @@
         <file>D:/temp/mylab/app.log</file>
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>app.log.%d{yyyyMMddHH}</fileNamePattern>
+            <fileNamePattern>D:/temp/mylab/app.log.%d{yyyyMMdd-HH}</fileNamePattern>
         </rollingPolicy>
         <encoder>
             <pattern>[%d][HH:mm:ss.SSS][%thread][%-1level][%logger{1}] - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="com.lijin" level="INFO"/>
+    <springProfile name="dev">
+        <logger name="com.lijin" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
 
-    <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
-    </root>
+    <springProfile name="prod">
+        <logger name="com.lijin" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
 </configuration>
-</springProfile>

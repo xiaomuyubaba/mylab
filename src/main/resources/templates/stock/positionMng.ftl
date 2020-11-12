@@ -26,7 +26,8 @@
 				{
 					field: "idx",
 					title: "序号",
-					width: 60,
+					width: 50,
+					align: "center",
 					formatter: function(v, row, idx, fd) {
 						return idx + 1;
 					}
@@ -117,10 +118,7 @@
     	
     	$("#refresh-btn").click(function() {
     		$positionMngTbl.bootstrapTable("resetView");
-    		$.ajaxPost("/stock/position/qry", 
-    			{
-    				status:"0"
-    			},
+    		$.ajaxPost("/stock/position/qry", {},
     			function(respData) {
     				$positionMngTbl.bootstrapTable("load", respData.logLst);
     		});

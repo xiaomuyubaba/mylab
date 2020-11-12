@@ -18,7 +18,8 @@ public class MyAppExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler
 	@ResponseBody
 	public AjaxResult handleException(HttpServletRequest req, Throwable t) {
-		return buildExceptionResp("处理异常: " + t.getMessage());
+		logger.error("处理异常", t);
+		return buildExceptionResp("处理异常");
 	}
 
 	protected AjaxResult buildExceptionResp(String msg) {

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-
-  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>%d{HH:mm:ss.SSS} [%thread] %-1level %logger{36} - %msg%n</Pattern>
-    </layout>
-  </appender>
-  
-  <logger name="com.lijin.mylab" level="INFO"/>
-
-  <root level="INFO">
-    <appender-ref ref="STDOUT" />
-  </root>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d][HH:mm:ss.SSS][%thread][%-1level][%logger{1}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.lijin" level="INFO"/>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
 </configuration>

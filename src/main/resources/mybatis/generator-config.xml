@@ -10,6 +10,11 @@
             location="C:/Users/jin/.m2/repository/mysql/mysql-connector-java/5.1.30/mysql-connector-java-5.1.30.jar"/>
 
     <context id="MySQLTables" targetRuntime="MyBatis3">
+
+        <property name="dao.package" value="com.lijin.mylab.dao"/>
+        
+        <plugin type="com.lijin.study.mbg.plugins.MyMBGPlugin"></plugin>
+        
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/mylab"
                         userId="root"

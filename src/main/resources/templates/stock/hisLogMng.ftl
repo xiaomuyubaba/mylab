@@ -85,7 +85,7 @@
 		<script src="/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
 		<script src="/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 		<script src="/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
-		<script src="/js/mylab.js"></script>
+		<script src="/js/"></script>
 
 		<script>
 		    var $logTable = $("#logTable"),
