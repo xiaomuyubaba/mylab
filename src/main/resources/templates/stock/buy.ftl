@@ -5,7 +5,7 @@
     <h4 class="modal-title">买入</h4>
 </div>
 <div class="modal-body">
-	<form class="form-horizontal" role="form">
+	<form id="add-stock-frm" class="form-horizontal" role="form" method="post" action="/stock/position/buy/submit">
 		<div class="form-group">
 			<label class="col-sm-2 control-label">选择股票:</label>
 			<div class="col-sm-4">
@@ -19,7 +19,7 @@
 			<label class="col-sm-2 control-label">买入日期:</label>
 			<div class="col-sm-4">
 				 <div id="buyInDt" class="input-group date">
-		        	<input name="buyInDt" type="text" class="form-control">
+		        	<input name="buyInDt" type="text" class="form-control" value="${today}">
 		        	<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 				</div>
 			</div>
@@ -38,40 +38,28 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-    <button id="buySubmitBtn" type="button" class="btn btn-primary submit">提交</button>
+    <button id="buy-submit-btn" type="button" class="btn btn-primary submit">提交</button>
 </div>
 
 <script>
-	$("#buySubmitBtn").click(function () {
-		var stockNo = $stockModal.find('select[name="stockNo"]').val();
-		var buyInDt = $stockModal.find('input[name="buyInDt"]').val();
-		var buyInAt = $stockModal.find('input[name="buyInAt"]').val();
-		var buyInNum = $stockModal.find('input[name="buyInNum"]').val();
-		$.ajax({
-	        url: "/stock/buy/submit",
-	        type: 'post',
-	        data: {
-	        	stockNo : stockNo,
-	        	buyInDt : buyInDt,
-	        	buyInAt : buyInAt,
-	        	buyInNum : buyInNum
-	        },
-	        success: function (data) {
-	            $stockModal.modal('hide');
-	            if (data == "succ") {
-	            	alert('买入成功!');
-	            	$logTable.bootstrapTable('refresh');
-	            } else {
-	            	alert(data);
-	            }
-	        },
-	        error: function (data) {
-	            $stockModal.modal('hide');
-	            alert('买入失败!');
-	        }
-	    });
-	});
-	$("#buyInDt").datepicker({
-	    "autoclose":true,"format":"yyyymmdd","language":"zh-CN"
-	});
+    ;$(function() {
+        $("#buy-submit-btn").click(function () {
+            $("#add-stock-frm").ajaxSubmit({
+                type: "post",
+                dataType: "json",
+                success: function(resp) {
+                    $.processAjaxResult(resp, function(respData) {
+                        alert('买入成功!');
+                        $positionMngTbl.bootstrapTable("load", respData.logLst);
+                        $positionMngModal.modal('hide');
+                    });
+                }
+            });
+        });
+        $("#buyInDt").datepicker({
+            "autoclose":true,
+            "format":"yyyymmdd",
+            "language":"zh-CN"
+        });
+    });
 </script>

@@ -19,9 +19,10 @@
 </div>
 
 <script>
+    var $positionMngModal = $("#position-mng-modal").mngModal();
+    var $positionMngTbl;
     $(function () {
-    	var $positionMngModal = $("#position-mng-modal").mngModal();
-		var $positionMngTbl = $("#position-mng-tbl").mngTable({
+		$positionMngTbl = $("#position-mng-tbl").mngTable({
 			columns: [
 				{
 					field: "idx",

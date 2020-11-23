@@ -1,4 +1,4 @@
-package com.lijin.mylab;
+package com.lijin.mylab.config;
 
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.context.annotation.Bean;

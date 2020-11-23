@@ -27,6 +27,7 @@
 		<div id="main"></div>
 
 		<script src="/js/jquery.min.js"></script>
+		<script src="/js/jquery.form.js"></script>
 		<script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 		<script src="/bootstrap-table/bootstrap-table.js"></script>
 		<script src="/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>

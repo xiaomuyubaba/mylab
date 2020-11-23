@@ -6,3 +6,15 @@ spring:
       url: jdbc:mysql://localhost:3306/mylab
       username: root
       password: jin123
+
+management:
+   endpoints:
+      web:
+         exposure:
+            include:
+               - info
+               - health
+               - beans
+               - caches
+               - conditions
+               - configprops

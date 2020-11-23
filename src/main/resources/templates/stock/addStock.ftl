@@ -25,8 +25,8 @@
 
 <script>
 	$("#add-stock-submit-btn").click(function () {
-		var stockNo = $stockModal.find('input[name="stockNo"]').val();
-		var stockNm = $stockModal.find('input[name="stockNm"]').val();
+		var stockNo = $stockMngModal.find('input[name="stockNo"]').val();
+		var stockNm = $stockMngModal.find('input[name="stockNm"]').val();
 		$.ajaxPost("/stock/stock/add/submit",
 			{
 				stockNo : stockNo,

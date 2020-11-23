@@ -8,6 +8,7 @@ import com.lijin.mylab.dao.mybatis.model.StockInfo;
 import com.lijin.mylab.dao.mybatis.model.StockPositionLog;
 import com.lijin.mylab.entity.AjaxResult;
 import com.lijin.mylab.enums.PositionLogStatus;
+import com.lijin.mylab.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,7 @@ public class StockController extends BaseController {
 	@GetMapping("/position/buy")
 	public String buy(Model model) {
 		model.addAttribute("stockList", stockInfoCache.getStockList());
+		model.addAttribute("today", DateUtil.now8());
 		return "stock/buy";
 	}
 	
@@ -80,7 +82,12 @@ public class StockController extends BaseController {
 		log.setBuyInAt(new BigDecimal(buyInAt).movePointRight(2).intValue());
 		log.setBuyInDt(buyInDt);
 		log.setTransNumber(buyInNum);
+		log.setSellOutAt(0);
+		log.setSellOutDt("");
+		log.setStatus(PositionLogStatus._0.getCode());
+		logger.info("before added logId: {}", log.getLogId());
 		stockPositionLogDAO.add(log);
+		logger.info("after added logId: {}", log.getLogId());
 		return buildSuccResp();
 	}
 	
@@ -89,6 +96,7 @@ public class StockController extends BaseController {
 		StockPositionLog log = stockPositionLogDAO.selectByLogId(logId);
 		Map<String, String> logInfo = commonBO.transferEntity(log, this::transferHoldingStockPositionLog);
 		model.addAttribute("logInfo", logInfo);
+		model.addAttribute("today", DateUtil.now8());
 		return "stock/sell";
 	}
 
@@ -164,7 +172,7 @@ public class StockController extends BaseController {
 	}
 	
 	@GetMapping("/stock/add")
-	public String addStock() {
+	public String addStock(Model model) {
 		return "stock/addStock";
 	}
 	

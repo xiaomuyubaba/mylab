@@ -5,7 +5,7 @@
     <h4 class="modal-title">卖出</h4>
 </div>
 <div class="modal-body">
-	<form class="form-horizontal" role="form">
+	<form id="position-sell-frm" class="form-horizontal" role="form" method="post" action="/stock/position/sell/submit">
 		<input type="hidden" name="logId" value="${logInfo["logId"]}" />
 		<div class="form-group">
 	    	<label class="col-sm-2 control-label">股票:</label>
@@ -23,7 +23,7 @@
 	        <label class="col-sm-2 control-label">卖出日期</label>
 	        <div class="col-sm-4">
 	        	<div id="sellOutDt" class="input-group date">
-		        	<input name="sellOutDt" type="text" class="form-control">
+		        	<input name="sellOutDt" type="text" class="form-control" value="${today}" />
 		        	<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 		        </div>
 			</div>
@@ -41,33 +41,23 @@
 
 <script>
 	$("#sellSubmitBtn").click(function() {
-		var logId = $stockModal.find('input[name="logId"]').val();
-		var sellOutDt = $stockModal.find('input[name="sellOutDt"]').val();
-		var sellOutAt = $stockModal.find('input[name="sellOutAt"]').val();
-		$.ajax({
-	        url: "/stock/sell/submit",
-	        type: 'post',
-	        data: {
-	        	logId : logId,
-	        	sellOutDt : sellOutDt,
-	        	sellOutAt : sellOutAt
-	        },
-	        success: function (data) {
-	            $stockModal.modal('hide');
-	            if (data == "succ") {
-	            	alert('卖出成功!');
-	            	$logTable.bootstrapTable('refresh');
-	            } else {
-	            	alert(data);
-	            }
-	        },
-	        error: function (data) {
-	            $stockModal.modal('hide');
-	            alert('卖出失败!');
-	        }
-	    });
-	});
-	$("#sellOutDt").datepicker({
-	    "autoclose":true,"format":"yyyymmdd","language":"zh-CN"
+		var logId = $positionMngModal.find('input[name="logId"]').val();
+		var sellOutDt = $positionMngModal.find('input[name="sellOutDt"]').val();
+		var sellOutAt = $positionMngModal.find('input[name="sellOutAt"]').val();
+		$.ajaxPost("/stock/position/delLog",
+		    {
+                logId : logId,
+                sellOutDt : sellOutDt,
+                sellOutAt : sellOutAt
+            },
+            function(ajaxResp) {
+                alert('卖出成功!');
+                $positionMngModal.modal('hide');
+                $positionMngTbl.bootstrapTable('refresh');
+        });
+
+        $("#sellOutDt").datepicker({
+            "autoclose":true,"format":"yyyymmdd","language":"zh-CN"
+        });
 	});
 </script>

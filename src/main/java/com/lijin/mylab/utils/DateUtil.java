@@ -12,11 +12,9 @@ import com.lijin.mylab.exception.BizzException;
 
 public class DateUtil extends DateUtils {
  
-	public static final String DATE_FORMAT_6 = "yyyyMM";
 	public static final String DATE_FORMAT_8 = "yyyyMMdd";
 	public static final String DATE_FORMAT_10 = "yyyy-MM-dd";
 	public static final String DATE_FORMAT_14 = "yyyyMMddHHmmss";
-	public static final String DATE_FORMAT_16 = "yyyy-MM-dd HH:mm";
 	public static final String DATE_FORMAT_17 = "yyyyMMdd HH:mm:ss";
 	public static final String DATE_FORMAT_19 = "yyyy-MM-dd HH:mm:ss";
 	
@@ -50,13 +48,6 @@ public class DateUtil extends DateUtils {
 		DateFormat df = new SimpleDateFormat(DATE_STR_FMT_14);
 		return df.format(date);
 	}
-	
-	public static String timeToStrMillionSeconds(Date date) {
-		AssertUtil.objIsNotNull(date, "日期参数为null");
-		DateFormat df = new SimpleDateFormat(TIME_STR_FMT_6);
-		String returnStr = df.format(date).concat("_").concat(String.valueOf(date.getTime()));//毫秒		
-		return returnStr;
-	}
 
 	public static String formatDateStr(String dateStr){
 	    SimpleDateFormat sf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -83,7 +74,7 @@ public class DateUtil extends DateUtils {
 	}
 	
 	public static String formatDate(Date date, String format) {
-		AssertUtil.objIsNull(date, "日期对象为null");
+		AssertUtil.objIsNotNull(date, "日期对象为null");
 		if (StringUtil.isEmpty(format)) {
 			DateFormat df = new SimpleDateFormat(DATE_FORMAT_10);
 			return df.format(date);
@@ -93,7 +84,7 @@ public class DateUtil extends DateUtils {
 	}
 	
 	public static String formatDate(Date date, DateFormat format) {
-		AssertUtil.objIsNull(date, "日期对象为null");
+		AssertUtil.objIsNotNull(date, "日期对象为null");
 		if (format == null) {
 			DateFormat df = new SimpleDateFormat(DATE_FORMAT_10);
 			return df.format(date);
@@ -149,11 +140,10 @@ public class DateUtil extends DateUtils {
 	
 	/**
 	 * 求指定日期的下一天
-	 * @param bh_date
 	 * @return
 	 */
 	public static String nextDay(Date date) {
-		AssertUtil.objIsNull(date, "参数不能为null");
+		AssertUtil.objIsNotNull(date, "参数不能为null");
 		return changeDays(date, 1); 
 	}
 
@@ -163,7 +153,7 @@ public class DateUtil extends DateUtils {
 	 * @return
 	 */
 	public static String preDay(Date date) {
-		AssertUtil.objIsNull(date, "参数不能为null");
+		AssertUtil.objIsNotNull(date, "参数不能为null");
 		return changeDays(date, -1);
 	}
 	

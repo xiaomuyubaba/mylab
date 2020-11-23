@@ -16,18 +16,14 @@
 	    <table id="stockTable"></table>
 	</div>
 	
-    <div id="stock-mng-modal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            </div>
-        </div>
-	</div>
+    <div id="stock-mng-modal" class="modal"></div>
 </div>
 
 <script>
+    var $stockMngModal = $('#stock-mng-modal').mngModal();
+    var $stockMngTable = $("#stockTable");
     $(function () {
-    	var $stockMngModal = $('#stockModal').modal({show: false});
-		var $stockMngTable = $("#stockTable").mngTable({
+		$stockMngTable.mngTable({
 			columns: [
 				{
 					field: "stockNo",
@@ -62,14 +58,12 @@
 		});
 		
 		$("#add-btn").click(function() {
-    		$.showModal("/stock/stock/addStock", $stockMngModal);
+    		$.showModal("/stock/stock/add", $stockMngModal);
     	});
 		
 		$("#refresh-btn").click(function() {
-    		$("#refresh-btn").html("刷新中...");
     		$.ajaxPost("/stock/stock/qry", null, function(respData) {
     			$stockMngTable.bootstrapTable("load", respData.stockLst);
-    			$("#refresh-btn").html("刷新");
     		});
     	});
     	
