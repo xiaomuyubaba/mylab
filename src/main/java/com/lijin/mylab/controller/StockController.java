@@ -39,7 +39,8 @@ public class StockController extends BaseController {
 	private StockInfoDAO stockInfoDAO;
 	
 	@GetMapping("/position/mng")
-	public String positionMng() {
+	public String positionMng(Model model) {
+		model.addAttribute("stockList", stockInfoCache.getStockList());
 		return "stock/positionMng";
 	}
 	

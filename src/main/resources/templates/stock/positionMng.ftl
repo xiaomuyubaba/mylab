@@ -9,8 +9,14 @@
 <div id="main-content">
 	<div class="mng-pane">
 		<div class="toolbar" style="height: 33px;">
-			<a id="buy-btn" class="btn btn-primary" href="javascript:">买入</a>
-			<a id="refresh-btn" class="btn btn-primary" href="javascript:">刷新</a>
+		    <select id="stockNoSel" style="width: 150px; height: 28px; margin-right: 10px;">
+                <option value="">--全部--</option>
+                <#list stockList as stock>
+                    <option value="${stock.stockNo}">${stock.stockNo} - ${stock.stockNm}</option>
+                </#list>
+            </select>
+            <a id="qry-btn" class="btn btn-primary" href="javascript:">查询</a>
+			<a id="buy-btn" class="btn btn-warning" href="javascript:">买入</a>
 		</div>
 		<table id="position-mng-tbl"></table>
 	</div>
@@ -101,10 +107,10 @@
 						},
 						"click .del-btn": function(e, val, row, idx) {
 							if (confirm("确认删除?")) {
-	                        	$.ajaxPost("/stock/position/delLog", {logId : row.logId}, 
+	                        	$.ajaxPost("/stock/delPositionLog", {logId : row.logId},
 	                        		function(ajaxResp) {
 						    			alert('删除成功!');
-	                                    $("#refresh-btn").trigger("click");
+	                                    $("#qry-btn").trigger("click");
 						    	});
 	                        }
 						}
@@ -117,15 +123,18 @@
     		$.showModal("/stock/position/buy", $positionMngModal);
     	});
     	
-    	$("#refresh-btn").click(function() {
+    	$("#qry-btn").click(function() {
     		$positionMngTbl.bootstrapTable("resetView");
-    		$.ajaxPost("/stock/position/qry", {},
+    		$.ajaxPost("/stock/position/qry",
+    		    {
+    		        _QRY_stockNo: $("#stockNoSel").val()
+    		    },
     			function(respData) {
     				$positionMngTbl.bootstrapTable("load", respData.logLst);
     		});
     	});
     	
-    	$("#refresh-btn").trigger("click");
+    	$("#qry-btn").trigger("click");
     });
     
     function profitAtFormatter(value) {

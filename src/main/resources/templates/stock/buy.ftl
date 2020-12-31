@@ -50,8 +50,8 @@
                 success: function(resp) {
                     $.processAjaxResult(resp, function(respData) {
                         alert('买入成功!');
-                        $positionMngTbl.bootstrapTable("load", respData.logLst);
                         $positionMngModal.modal('hide');
+                        $("#refresh-btn").trigger("click");
                     });
                 }
             });

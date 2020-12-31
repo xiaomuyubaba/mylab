@@ -44,7 +44,7 @@
 		var logId = $positionMngModal.find('input[name="logId"]').val();
 		var sellOutDt = $positionMngModal.find('input[name="sellOutDt"]').val();
 		var sellOutAt = $positionMngModal.find('input[name="sellOutAt"]').val();
-		$.ajaxPost("/stock/position/delLog",
+		$.ajaxPost("/stock/position/sell/submit",
 		    {
                 logId : logId,
                 sellOutDt : sellOutDt,
@@ -53,7 +53,7 @@
             function(ajaxResp) {
                 alert('卖出成功!');
                 $positionMngModal.modal('hide');
-                $positionMngTbl.bootstrapTable('refresh');
+                $("#refresh-btn").trigger("click");
         });
 
         $("#sellOutDt").datepicker({
