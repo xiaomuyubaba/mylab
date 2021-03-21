@@ -53,7 +53,7 @@
             function(ajaxResp) {
                 alert('卖出成功!');
                 $positionMngModal.modal('hide');
-                $("#refresh-btn").trigger("click");
+                $("#qry-btn").trigger("click");
         });
 
         $("#sellOutDt").datepicker({

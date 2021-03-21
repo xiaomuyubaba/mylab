@@ -1,5 +1,6 @@
 package com.lijin.mylab;
 
+import com.lijin.mylab.utils.DateUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,10 @@ public class MyApp {
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(MyApp.class);
+		app.addInitializers(applicationContext -> {
+			logger.info("#############启动啦##########");
+			logger.info("Welcomde: " + DateUtil.now19());
+		});
 		app.addListeners(new ApplicationListener<ApplicationEvent>() {
 			@Override
 			public void onApplicationEvent(ApplicationEvent event) {
@@ -34,8 +39,8 @@ public class MyApp {
 		return new CommandLineRunner() {
 			@Override
 			public void run(String... args) throws Exception {
-				logger.info("app is tarted...");
-				logger.info(Arrays.toString(args));
+				logger.info("####app is tarted...#####");
+				logger.info("####启动参数：" + Arrays.toString(args));
 			}
 		};
 	}

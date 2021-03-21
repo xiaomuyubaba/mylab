@@ -17,4 +17,5 @@ public class MyAppConfig implements WebMvcConfigurer {
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
 
+
 }

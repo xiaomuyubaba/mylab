@@ -1,3 +1,4 @@
+mylab.version: mylab(${mylab.version})
 spring:
    profiles:
       active: dev
