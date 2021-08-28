@@ -1,17 +1,31 @@
-mylab.version: mylab(${mylab.version})
 spring:
-   profiles:
-      active: dev
-   freemarker:
-      suffix: .ftl
-      allow-request-override: false
-      cache: false
-      check-template-location: true
-      charset: UTF-8
-      content-type: text/html
-      expose-request-attributes: false
-      expose-session-attributes: false
-      expose-spring-macro-helpers: false
-      template-loader-path: file:D:\works\github\mylab\src\main\resources\templates
+  profiles:
+    active: dev
+  freemarker:
+    suffix: .ftl
+    allow-request-override: false
+    cache: false
+    check-template-location: true
+    charset: UTF-8
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
+    template-loader-path: file:D:\works\github\mylab\src\main\resources\templates
+    settings:
+      template_update_delay: 10
+      locale: zh_CN
+      datetime_format: yyyy-MM-dd HH:mm:ss
+      date_format: yyyy-MM-dd
+      number_format: #.##
+  autoconfigure:
+    exclude:
+      - DataSourceAutoConfiguration.class
 mybatis:
-   mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+mylab:
+  version: 1.0.1
+  dbUrl: test.com
+  db:
+    dbUrl: mydburl

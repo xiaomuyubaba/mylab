@@ -14,9 +14,9 @@
 		<div id="sidebar">
 			<ul class="side-menu">
 				<li class="active">
-					<a href="#" title="股海浮沉"><i class="fa fa-bar-chart"></i></a>
+					<a href="#" title="股海浮沉<@hello />"><i class="fa fa-bar-chart"></i></a>
 					<ul>
-						<li class="sub-menu" target="/stock/position/mng"><a href="javascript:void(0);">当前持仓</a></li>
+						<li class="sub-menu" target="/stock/position/mng"><a href="javascript:void(0);">当前持仓${today?string("yyyy-MM-dd HH:mm:ss")}</a></li>
 						<li class="sub-menu" target="/stock/hisLog/mng"><a href="javascript:void(0);">历史记录</a></li>
 						<li class="sub-menu" target="/stock/stock/mng"><a href="javascript:void(0);">股票管理</a></li>
 					</ul>

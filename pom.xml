@@ -21,18 +21,6 @@
 
     <build>
         <finalName>mylab</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources/</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/log*.xml</include>
-                    <include>**/banner.txt</include>
-                    <include>**/application*.yaml</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
